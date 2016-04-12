@@ -1,11 +1,14 @@
-def make_block(name, items):
+TAG = 'SFT'
+
+
+def block(name, items):
     return {
         'type': name,
         'items': [{'count': 1, 'id': item.id} for item in items],
     }
 
 
-def make_set(title, map_, champion, blocks):
+def item_set(title, map_, champion, blocks):
     map_ = 'any'
     mode = 'any'
     # TODO: specify mode/map
@@ -18,7 +21,7 @@ def make_set(title, map_, champion, blocks):
     #     # TODO: mode = 'any' ?
 
     return {
-        'title': 'SFT {}'.format(title),
+        'title': '{} {}'.format(TAG, title),
         'map': map_,
         'mode': mode,
 
