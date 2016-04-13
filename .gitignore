@@ -1,3 +1,5 @@
+.cache/
+.eggs/
 build/
 dist/
 

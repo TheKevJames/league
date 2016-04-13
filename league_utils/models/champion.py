@@ -27,7 +27,6 @@ class Champion(object):
     def __hash__(self):
         return hash(self.id)
 
-
     # riot data
     def _load_riot(self):
         info = api.riot.static_get_champion(self.id, champ_data='all')

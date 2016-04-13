@@ -12,9 +12,27 @@ class Item(object):
         self._builds_from = None
         self._champion = None
         self._champion_unlocked = False
-        self._maps = None  # ["Butcher's Bridge", 'Howling Abyss', "Summoner's Rift", 'The Crystal Scar', 'The Proving Grounds', 'Twisted Treeline']
-        self._stats = None  # ['FlatArmorMod', 'FlatCritChanceMod', 'FlatHPPoolMod', 'FlatHPRegenMod', 'FlatMPPoolMod', 'FlatMPRegenMod', 'FlatMagicDamageMod', 'FlatMovementSpeedMod', 'FlatPhysicalDamageMod', 'FlatSpellBlockMod', 'PercentAttackSpeedMod', 'PercentLifeStealMod', 'PercentMovementSpeedMod']
-        self._tags = None  # ['Active', 'Armor', 'ArmorPenetration', 'AttackSpeed', 'Aura', 'Bilgewater', 'Boots', 'Consumable', 'CooldownReduction', 'CriticalStrike', 'Damage', 'GoldPer', 'Health', 'HealthRegen', 'Jungle', 'Lane', 'LifeSteal', 'MagicPenetration', 'Mana', 'ManaRegen', 'NonbootsMovement', 'OnHit', 'Slow', 'SpellBlock', 'SpellDamage', 'SpellVamp', 'Stealth', 'Tenacity', 'Trinket', 'Vision']
+        # TODO: do something with these
+        #  ["Butcher's Bridge", 'Howling Abyss', "Summoner's Rift",
+        #   'The Crystal Scar', 'The Proving Grounds', 'Twisted Treeline']
+        self._maps = None
+        # TODO: do something with these
+        # ['FlatArmorMod', 'FlatCritChanceMod', 'FlatHPPoolMod',
+        #  'FlatHPRegenMod', 'FlatMPPoolMod', 'FlatMPRegenMod',
+        #  'FlatMagicDamageMod', 'FlatMovementSpeedMod',
+        #  'FlatPhysicalDamageMod', 'FlatSpellBlockMod',
+        #  'PercentAttackSpeedMod', 'PercentLifeStealMod',
+        #  'PercentMovementSpeedMod']
+        self._stats = None
+        # TODO: do something else with these?
+        # ['Active', 'Armor', 'ArmorPenetration', 'AttackSpeed', 'Aura',
+        #  'Bilgewater', 'Boots', 'Consumable', 'CooldownReduction',
+        #  'CriticalStrike', 'Damage', 'GoldPer', 'Health', 'HealthRegen',
+        #  'Jungle', 'Lane', 'LifeSteal', 'MagicPenetration', 'Mana',
+        #  'ManaRegen', 'NonbootsMovement', 'OnHit', 'Slow', 'SpellBlock',
+        #  'SpellDamage', 'SpellVamp', 'Stealth', 'Tenacity', 'Trinket',
+        #  'Vision']
+        self._tags = None
 
     def __repr__(self):
         return '[{} - {}]'.format(self.id, self.name)
@@ -27,7 +45,6 @@ class Item(object):
 
     def __hash__(self):
         return hash(self.id)
-
 
     # fix missing riot tags
     def _get_missing_tags(self):
@@ -60,7 +77,6 @@ class Item(object):
             return []
 
         raise Exception('No tags for %r.' % self)
-
 
     # riot data
     def _load_riot(self):
@@ -116,7 +132,6 @@ class Item(object):
         if isinstance(self._tags, type(None)):
             self._load_riot()
         return self._tags
-
 
     # additional data
     @property

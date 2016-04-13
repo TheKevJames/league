@@ -23,6 +23,8 @@ setuptools.setup(
     license='MIT License',
     packages=setuptools.find_packages(),
     install_requires=requirements,
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'pytest-pep8'],
     classifiers=[
         'Programming Language :: Python',
         'Development Status :: 4 - Beta',
