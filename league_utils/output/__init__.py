@@ -2,12 +2,21 @@ import os
 import platform
 
 
-c_drive = 'C'
-if platform.system() != 'Windows':
-    c_drive = os.path.join(os.path.expanduser('~'), '.PlayOnLinux',
-                           'wineprefix', 'LeagueOfLegends', 'drive_c')
+def get_base_dir(system):
+    if system == 'Windows':
+        return os.path.join('C:', 'Riot Games', 'League of Legends')
+    elif system == 'Linux':
+        return os.path.join(os.path.expanduser('~'), '.PlayOnLinux',
+                            'wineprefix', 'LeagueOfLegends', 'drive_c',
+                            'Riot Games', 'League of Legends')
+    elif system == 'Darwin':
+        return os.path.join(os.sep, 'Applications', 'League of Legends.app',
+                            'Contents', 'LOL')
+    else:
+        raise Exception('Platform "{}" not supported.'.format(system))
 
-config_dir = os.path.join(c_drive, 'Riot Games', 'League of Legends', 'Config')
+
+config_dir = os.path.join(get_base_dir(platform.system()))
 champions_dir = os.path.join(config_dir, 'Champions')
 
 
