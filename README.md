@@ -3,6 +3,29 @@
 LeagueUtils is a set of utilities for interacting with League of Legends data.
 Currently, it contains the League ISG (Item Set Generator).
 
+## Setup
+
+### Install from PyPI
+
+Simply run
+
+    pip install --pre league-utils
+
+### Install from Source
+
+After cloning this repo, run
+
+    python setup.py install
+
+### Run without installing
+
+This project can also be run without installation. After cloning this repo, run
+
+    pip install -r requirements.txt
+
+and use the `league-utils.py` script in the root of this folder. Working in a
+[virtualenv](virtualenvwrapper.readthedocs.org) is recommended!
+
 ## ISG
 
 The Item Set Generator is designed to build recommended pages for every
@@ -12,16 +35,22 @@ updating your League config with the results.
 
 ### Usage
 
-After running `pip install -r requirements.txt` (preferably in a
-[virtualenv](virtualenvwrapper.readthedocs.org)), simply run
+The most common use case is to run
 
-    ./league-utils.py isg --write
+    league-utils isg --write
 
-to write the data to your system. You can also run something like
+to install the item sets for every champion. The item sets will be installed
+beside the default Riot recommended pages, but if you have manually downloaded
+item sets into your config directory before, these may be overwritten. Make
+sure any such files have unique names before running this script! (eg. anything
+other than `${CHAMPION}_${ROLE}.json`).
 
-    ./league-utils.py isg --champ Rumble --no-write
+You can also run something like
 
-to dump info on that champion to your terminal.
+    league-utils isg --champ Rumble --no-write
+
+to dump info on that champion to your terminal. Currently, this isn't overly
+readable, as it is in Riot's item set format. This will change at some point.
 
 # Disclaimer
 

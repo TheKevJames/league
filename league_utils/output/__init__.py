@@ -1,6 +1,5 @@
 import os
 import platform
-import shutil
 
 
 c_drive = 'C'
@@ -14,11 +13,6 @@ champions_dir = os.path.join(config_dir, 'Champions')
 
 def to_file(champ, role, item_set):
     champion_dir = os.path.join(champions_dir, champ.key, 'Recommended')
-
-    try:
-        shutil.rmtree(champion_dir)
-    except OSError:
-        pass
 
     try:
         os.makedirs(champion_dir)
