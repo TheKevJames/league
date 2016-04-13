@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher'],
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-pep8'],
+    tests_require=['pytest', 'pytest-cov', 'pytest-pep8'],
     classifiers=[
         'Programming Language :: Python',
         'Development Status :: 4 - Beta',
