@@ -8,6 +8,7 @@ import league_utils.models as models
 #         items.append(Item(str(item['id']), item['name']))
 #     return items
 
+
 def boots():
     return [
         models.Item('3158', 'Ionian Boots of Lucidity'),
@@ -19,6 +20,7 @@ def boots():
         models.Item('3117', 'Boots of Mobility'),
     ]
 
+
 # TODO: complete incomplete items in build
 # def completed_items():
 #     items = get_all()
@@ -26,6 +28,7 @@ def boots():
 #         operator.add, [item.builds_from for item in items])])
 #     return without([item for item in items if item.id not in incomplete],
 #                          get_consumables(1), get_enchantments())
+
 
 def consumables(extras=False):
     cons = [
@@ -44,6 +47,7 @@ def consumables(extras=False):
             models.Item('2138', 'Elixir of Iron')])
 
     return cons
+
 
 def enchantments():
     return [

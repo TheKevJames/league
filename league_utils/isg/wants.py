@@ -2,6 +2,9 @@ import collections
 import operator
 
 
+UNWANTED_TAGS = ['Active', 'Boots', 'Consumable', 'Jungle', 'Lane', 'Trinket']
+
+
 def order(wants, items):
     ratings = {item: sum(wants[tag] for tag in item.tags) for item in items}
     return [item for item, rating in sorted(ratings.items(),
@@ -9,7 +12,6 @@ def order(wants, items):
                                             reverse=True) if rating > 0]
 
 
-UNWANTED_TAGS = ['Active', 'Boots', 'Consumable', 'Jungle', 'Lane', 'Trinket']
 def tags(champ, role):
     wanted_tags = collections.Counter()
     for build_tags in [build.tags for build in champ.builds[role]]:

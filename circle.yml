@@ -1,0 +1,19 @@
+machine:
+  environment:
+    LEAGUE_TOKEN: dummy-token
+
+dependencies:
+  override:
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+    - pip install coveralls
+    - python setup.py install
+
+test:
+  override:
+    - python setup.py test
+    - tox
+  post:
+    - mv htmlcov $CIRCLE_ARTIFACTS/coverage
+    - mv .junitxml $CIRCLE_TEST_REPORTS/junit.xml
+    - coveralls

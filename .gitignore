@@ -1,5 +1,12 @@
+.cache/
+.eggs/
+.tox/
 build/
 dist/
+htmlcov/
 
 *.egg-info
 *.pyc
+
+.coverage
+.junitxml

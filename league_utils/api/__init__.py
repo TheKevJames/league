@@ -22,6 +22,6 @@ def get_champ(champ_filter=None):
             return champs[-1:]
 
     if champ_filter:
-        raise Exception('could not find champion {}', champ_filter)
+        raise Exception('Could not find champion {}', champ_filter)
 
     return champs
