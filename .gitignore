@@ -9,3 +9,4 @@ htmlcov/
 *.pyc
 
 .coverage
+.junitxml

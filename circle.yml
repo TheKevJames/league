@@ -15,4 +15,5 @@ test:
     - tox
   post:
     - mv htmlcov $CIRCLE_ARTIFACTS/coverage
+    - mv .junitxml $CIRCLE_TEST_REPORTS/junit.xml
     - coveralls
