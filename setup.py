@@ -4,14 +4,6 @@ import setuptools
 from league_utils.version import __version__
 
 
-# For reasons why you shouldn't do this, see:
-#   https://caremad.io/blog/setup-vs-requirement/
-# For all the fucks I give see:
-#   /dev/zero
-with open('requirements.txt', 'r') as f:
-    requirements = f.read().splitlines()
-
-
 setuptools.setup(
     name='league-utils',
     version=__version__,
@@ -22,7 +14,7 @@ setuptools.setup(
     url='https://github.com/TheKevJames/league.git',
     license='MIT License',
     packages=setuptools.find_packages(),
-    install_requires=requirements,
+    install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-pep8'],
     classifiers=[
