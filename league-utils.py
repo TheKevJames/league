@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import sys
-
-import league_utils
+import league_utils.entrypoint as league
 
 
 if __name__ == '__main__':
-    league_utils.run(sys.argv[1:])
+    league.run()
