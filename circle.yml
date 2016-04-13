@@ -1,0 +1,8 @@
+dependencies:
+  override:
+    - pip install -r requirements.txt
+    - python setup.py install
+
+test:
+  override:
+    - python setup.py test
