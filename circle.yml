@@ -17,26 +17,15 @@ test:
     - mv htmlcov $CIRCLE_ARTIFACTS/coverage
     - mv .junitxml $CIRCLE_TEST_REPORTS/junit.xml
     - coveralls
-    - git fetch --tags
 
 deployment:
   release:
-    tag: /[0-9]+\.[0-9]+\.[0-9]+/
+    branch: master
     commands:
-      - rm -f ~/.pypirc
       - echo "[server-login]" > ~/.pypirc
       - echo "username:$PYPI_USERNAME" >> ~/.pypirc
       - echo "password:$PYPI_PASSWORD" >> ~/.pypirc
 
-      - .tox/py34/bin/python setup.py register
-
-      - .tox/py34/bin/python setup.py sdist upload
-
-      - .tox/py27/bin/python setup.py bdist_egg upload
-      - .tox/py30/bin/python setup.py bdist_egg upload
-      - .tox/py31/bin/python setup.py bdist_egg upload
-      - .tox/py34/bin/python setup.py bdist_egg upload
-
-      - .tox/py34/bin/python setup.py bdist_wheel upload
+      - ./script/release
 
       - rm -f ~/.pypirc
