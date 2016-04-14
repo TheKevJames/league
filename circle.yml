@@ -33,8 +33,6 @@ deployment:
       - .tox/py34/bin/python setup.py sdist upload
 
       - .tox/py27/bin/python setup.py bdist_egg upload
-      - .tox/py30/bin/python setup.py bdist_egg upload
-      - .tox/py31/bin/python setup.py bdist_egg upload
       - .tox/py34/bin/python setup.py bdist_egg upload
 
       - .tox/py34/bin/python setup.py bdist_wheel upload
