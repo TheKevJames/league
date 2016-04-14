@@ -142,7 +142,7 @@ class Item(object):
             elif any(x in self.name for x in ("Death's Daughter",
                                               'Fire at Will',
                                               'Raise Morale')):
-                self._champion = 'Gankplank'
+                self._champion = 'Gangplank'
             else:
                 self._champion_unlocked = True
         return self._champion
