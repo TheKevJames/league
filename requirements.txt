@@ -2,3 +2,4 @@ beautifulsoup4
 docopt
 requests
 riotwatcher
+setuptools_scm
