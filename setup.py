@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 import setuptools
 
-from league_utils.version import __version__
-
 
 setuptools.setup(
     name='league-utils',
-    version=__version__,
+    use_scm_version=True,
     description='League of Legends utilities, including an Item Set Generator',
     keywords='league of legends game utilities item set generator isg',
     author='Kevin James',
@@ -15,7 +13,7 @@ setuptools.setup(
     license='MIT License',
     packages=setuptools.find_packages(),
     install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher'],
-    setup_requires=['pytest-runner'],
+    setup_requires=['pytest-runner', 'setuptools_scm'],
     tests_require=['pytest', 'pytest-cov', 'pytest-pep8'],
     classifiers=[
         'Programming Language :: Python',
