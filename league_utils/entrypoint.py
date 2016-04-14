@@ -12,7 +12,6 @@ options:
 import sys
 
 import docopt
-import setuptools_scm
 
 import league_utils.api as api
 import league_utils.models as models
@@ -22,8 +21,7 @@ import league_utils.sources as sources
 
 
 def run():
-    args = docopt.docopt(__doc__, version=setuptools_scm.get_version(),
-                         argv=sys.argv[1:])
+    args = docopt.docopt(__doc__, version='0.1.4', argv=sys.argv[1:])
 
     if args['isg']:
         name = None
