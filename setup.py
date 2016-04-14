@@ -12,7 +12,8 @@ setuptools.setup(
     url='https://github.com/TheKevJames/league.git',
     license='MIT License',
     packages=setuptools.find_packages(),
-    install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher'],
+    install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher',
+                      'setuptools_scm'],
     setup_requires=['pytest-runner', 'setuptools_scm'],
     tests_require=['pytest', 'pytest-cov', 'pytest-pep8'],
     classifiers=[
