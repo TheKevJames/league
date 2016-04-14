@@ -26,7 +26,6 @@ deployment:
       - echo "[server-login]" > ~/.pypirc
       - echo "username:$PYPI_USERNAME" >> ~/.pypirc
       - echo "password:$PYPI_PASSWORD" >> ~/.pypirc
-      - rm -f ~/.pypirc
 
       - .tox/py34/bin/python setup.py register
 
@@ -38,3 +37,5 @@ deployment:
       - .tox/py34/bin/python setup.py bdist_egg upload
 
       - .tox/py34/bin/python setup.py bdist_wheel upload
+
+      - rm -f ~/.pypirc
