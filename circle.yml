@@ -21,7 +21,6 @@ test:
 deployment:
   release:
     branch: master
-    owner: thekevjames
     commands:
       - rm -f ~/.pypirc
       - echo "[server-login]" > ~/.pypirc
