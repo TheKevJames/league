@@ -1,11 +1,7 @@
+import json
+
+
 TAG = 'SFT'
-
-
-def block(name, items):
-    return {
-        'type': name,
-        'items': [{'count': 1, 'id': item.id} for item in items],
-    }
 
 
 def item_set(title, map_, champion, blocks):
@@ -20,7 +16,7 @@ def item_set(title, map_, champion, blocks):
     #     mode = 'CLASSIC'
     #     # TODO: mode = 'any' ?
 
-    return {
+    return json.dumps({
         'title': '{} {}'.format(TAG, title),
         'map': map_,
         'mode': mode,
@@ -35,5 +31,8 @@ def item_set(title, map_, champion, blocks):
         'isGlobalForMaps': True,
         'champion': champion,
 
-        'blocks': blocks,
-    }
+        'blocks': [{
+            'type': name,
+            'items': [{'count': 1, 'id': item.id} for item in items],
+        } for name, items in blocks],
+    })

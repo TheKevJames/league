@@ -35,4 +35,8 @@ def to_file(champ, role, item_set):
 
 
 def to_screen(_champ, _role, item_set):
-    print(item_set)
+    print('- {} ({})'.format(item_set[0], item_set[1]))
+    for block in item_set[3]:
+        print('  - {}:'.format(block[0]))
+        for item in block[1]:
+            print('    - {}'.format(item.name))
