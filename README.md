@@ -49,8 +49,7 @@ You can also run something like
 
     league-utils isg --champ Rumble --no-write
 
-to dump info on that champion to your terminal. Currently, this isn't overly
-readable, as it is in Riot's item set format. This will change at some point.
+to dump info on that champion to your terminal.
 
 # Disclaimer
 
