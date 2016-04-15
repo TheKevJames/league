@@ -16,7 +16,7 @@ def get_base_dir(system):
         raise Exception('Platform "{}" not supported.'.format(system))
 
 
-config_dir = os.path.join(get_base_dir(platform.system()))
+config_dir = os.path.join(get_base_dir(platform.system()), 'Config')
 champions_dir = os.path.join(config_dir, 'Champions')
 
 
