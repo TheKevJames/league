@@ -15,5 +15,5 @@ def item_set(champ, role):
 
     return (role.name, 'SR', champ.key,
             [('Consumables', league_utils.isg.groups.consumables()),
-             ('Early & Boots', early),
-             ('Build', build)])
+             ('Early & Boots', common.dedup(early)),
+             ('Build', common.dedup(build))])
