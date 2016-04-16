@@ -9,6 +9,9 @@ def get_base_dir(system):
         return os.path.join(os.path.expanduser('~'), '.PlayOnLinux',
                             'wineprefix', 'LeagueOfLegends', 'drive_c',
                             'Riot Games', 'League of Legends')
+    elif system.startswith('CYGWIN_NT'):
+        return os.path.join(os.sep, 'cygdrive', 'c', 'Riot Games',
+                            'League of Legends')
     elif system == 'Darwin':
         return os.path.join(os.sep, 'Applications', 'League of Legends.app',
                             'Contents', 'LOL')
