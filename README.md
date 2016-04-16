@@ -5,6 +5,13 @@ Currently, it contains the League ISG (Item Set Generator).
 
 ## Setup
 
+### From a binary
+
+Pre-compiled binaries are provided for some Operating Systems. If yours is
+supported, you can grab the binary for
+[the latest release](https://github.com/thekevjames/league/releases/latest) and
+just run that without installing anything.
+
 ### Install from PyPI
 
 Simply run
@@ -13,14 +20,18 @@ Simply run
 
 ### Install from Source
 
-After cloning this repo or downloading the most recent zipfile or tarball, run
+After cloning this repo or downloading and un{zip,tar}ing the most recent
+[zipfile or tarball](https://github.com/thekevjames/league/releases/latest),
+run
 
     python setup.py install
 
 ### Run without installing
 
 This project can also be run without installation. After cloning this repo or
-downloading the most recent zipfile or tarball, run
+downloading and un{zip,tar}ing the most recent
+[zipfile or tarball](https://github.com/thekevjames/league/releases/latest),
+run
 
     pip install -r requirements.txt
 
