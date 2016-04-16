@@ -13,13 +13,14 @@ Simply run
 
 ### Install from Source
 
-After cloning this repo, run
+After cloning this repo or downloading the most recent zipfile or tarball, run
 
     python setup.py install
 
 ### Run without installing
 
-This project can also be run without installation. After cloning this repo, run
+This project can also be run without installation. After cloning this repo or
+downloading the most recent zipfile or tarball, run
 
     pip install -r requirements.txt
 
@@ -50,6 +51,17 @@ You can also run something like
     league-utils isg --champ Rumble --no-write
 
 to dump info on that champion to your terminal.
+
+# FAQ
+
+## I'm getting a `No LEAGUE_TOKEN found` error. What gives?
+
+Distributing secrets is hard; until I come up with a good way to do so, you'll
+need to get a developer token from Riot Games to use this app. Simply set
+
+    export LEAGUE_TOKEN=xxxxxxxxx
+
+with your token before running this app.
 
 # Disclaimer
 

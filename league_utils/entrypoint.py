@@ -1,6 +1,6 @@
 """usage:
-league-utils.py -h | --help
-league-utils.py isg [--champ=<champ>] [--write | --no-write]
+league-utils isg [--champ=<champ>] [--write | --no-write]
+league-utils -h | --help
 
 options:
     isg                    Use the item set generator
@@ -16,8 +16,7 @@ import docopt
 import league_utils.api as api
 import league_utils.models as models
 import league_utils.isg as isg
-# pylint: disable=W0611
-import league_utils.isg.encode as encode
+import league_utils.isg.encode as encode  # pylint: disable=W0611
 import league_utils.output as output
 import league_utils.sources as sources
 
