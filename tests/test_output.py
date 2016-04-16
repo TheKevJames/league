@@ -6,3 +6,9 @@ def test_base_dir():
     assert output.get_base_dir('Darwin')
     assert output.get_base_dir('Linux')
     assert output.get_base_dir('Windows')
+
+    try:
+        output.get_base_dir('UnsupportedOS')
+        assert False
+    except Exception:
+        assert True

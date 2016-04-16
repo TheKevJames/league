@@ -10,3 +10,7 @@ def test_equality():
 
     top_copy = models.Role('Top')
     assert top == top_copy
+
+
+def test_repr():
+    assert str(models.Role('Jungle')) == '[Jungle]'
