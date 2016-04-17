@@ -1,12 +1,9 @@
+import league_utils.api as api
 import league_utils.models as models
 
 
-# TODO: find similar items
-# def all_items():
-#     items = []
-#     for item in riot.static_get_item_list()['data'].values():
-#         items.append(Item(str(item['id']), item['name']))
-#     return items
+def all_():
+    return [models.Item(x['id'], x['name']) for x in api.get_item()]
 
 
 def boots():

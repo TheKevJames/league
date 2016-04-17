@@ -25,3 +25,19 @@ def get_champ(champ_filter=None):
         raise Exception('Could not find champion {}', champ_filter)
 
     return champs
+
+
+def get_item(item_filter=None):
+    items = []
+    for item in riot.static_get_item_list()['data'].values():
+        items.append(dict(id=item['id'], name=item['name']))
+        if not item_filter:
+            continue
+
+        if item_filter == item['name'].lower():
+            return items[-1:]
+
+    if item_filter:
+        raise Exception('Could not find item {}', item_filter)
+
+    return items
