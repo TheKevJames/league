@@ -15,6 +15,6 @@ def item_set(champ, role):
     build = common.without(champ.builds[role], consumables, biscuits, early)
 
     return (role.name, 'SR', champ.key,
-            [('Consumables', consumables),
-             ('Early & Boots', common.dedup(early)),
-             ('Build', common.dedup(build))])
+            [('Early & Boots', common.dedup(early)),
+             ('Build', common.dedup(build)),
+             ('Consumables', consumables)])
