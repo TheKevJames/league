@@ -30,8 +30,15 @@ def boots():
 #                          get_consumables(1), get_enchantments())
 
 
-def consumables(extras=False):
-    cons = [
+def biscuits():
+    return [
+        models.Item('2009', 'Total Biscuit of Rejuvenation'),
+        models.Item('2010', 'Total Biscuit of Rejuvenation'),
+    ]
+
+
+def consumables():
+    return [
         models.Item('2003', 'Health Potion'),
         models.Item('2031', 'Refillable Potion'),
         models.Item('2043', 'Vision Ward'),
@@ -39,14 +46,19 @@ def consumables(extras=False):
         models.Item('3341', 'Sweeping Lens'),
         models.Item('3363', 'Farsight Alteration'),
         models.Item('3364', 'Oracle Alteration'),
+        models.Item('2138', 'Elixir of Iron'),
+        models.Item('2139', 'Elixir of Sorcery'),
+        models.Item('2140', 'Elixir of Wrath'),
     ]
-    if extras:
-        cons.extend([
-            models.Item('2009', 'Total Biscuit of Rejuvenation'),
-            models.Item('2010', 'Total Biscuit of Rejuvenation'),
-            models.Item('2138', 'Elixir of Iron')])
 
-    return cons
+
+def dorans():
+    return [
+        ('1054', "Doran's Shield"),
+        ('1055', "Doran's Blade"),
+        ('1056', "Doran's Ring"),
+        ('1083', 'Cull'),
+    ]
 
 
 def enchantments():

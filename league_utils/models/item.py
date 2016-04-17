@@ -139,7 +139,9 @@ class Item(object):
         if not self._champion and not self._champion_unlocked:
             if 'Hex Core' in self.name:
                 self._champion = 'Viktor'
-            elif any(x in self.name for x in ("Death's Daughter",
+            elif self.name == 'The Black Spear':
+                self._champion = 'Kalista'
+            elif any(x == self.name for x in ("Death's Daughter",
                                               'Fire at Will',
                                               'Raise Morale')):
                 self._champion = 'Gangplank'

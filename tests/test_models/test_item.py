@@ -6,6 +6,7 @@ def test_champion_specific():
         ('Gangplank', "Death's Daughter"),
         ('Gangplank', 'Fire at Will'),
         ('Gangplank', 'Raise Morale'),
+        ('Kalista', 'The Black Spear'),
         ('Viktor', 'Prototype Hex Core'),
         ('Viktor', 'The Hex Core mk-1'),
         ('Viktor', 'The Hex Core mk-2'),

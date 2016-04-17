@@ -5,15 +5,16 @@ import league_utils.isg.wants
 
 
 def item_set(champ, role):
-    early = common.without(champ.starts[role],
-                           league_utils.isg.groups.consumables(1)) + \
+    biscuits = league_utils.isg.groups.biscuits()
+
+    consumables = league_utils.isg.groups.consumables()
+    early = common.without(champ.starts[role], consumables, biscuits) + \
             league_utils.isg.wants.order(
                 league_utils.isg.wants.tags(champ, role),
                 league_utils.isg.groups.boots())
-    build = common.without(champ.builds[role],
-                           league_utils.isg.groups.consumables(1), early)
+    build = common.without(champ.builds[role], consumables, biscuits, early)
 
     return (role.name, 'SR', champ.key,
-            [('Consumables', league_utils.isg.groups.consumables()),
+            [('Consumables', consumables),
              ('Early & Boots', common.dedup(early)),
              ('Build', common.dedup(build))])
