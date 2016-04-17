@@ -5,13 +5,6 @@ Currently, it contains the League ISG (Item Set Generator).
 
 ## Setup
 
-### From a binary
-
-Pre-compiled binaries are provided for some Operating Systems. If yours is
-supported, you can grab the binary for
-[the latest release](https://github.com/thekevjames/league/releases/latest) and
-just run that without installing anything.
-
 ### Install from PyPI
 
 Simply run
@@ -37,6 +30,14 @@ run
 
 and use the `league-utils.py` script in the root of this folder. Working in a
 [virtualenv](virtualenvwrapper.readthedocs.org) is recommended!
+
+### From a binary
+
+Pre-compiled binaries are provided for some Operating Systems. If yours is
+supported, you can grab the binary for
+[the latest release](https://github.com/thekevjames/league/releases/latest) and
+just run that without installing anything. Note that using this method does not
+allow you to easily update.
 
 ## ISG
 

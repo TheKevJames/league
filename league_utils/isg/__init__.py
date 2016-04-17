@@ -12,7 +12,7 @@ def item_set(champ, role):
 
     consumables = league_utils.isg.groups.consumables()
     early = common.without(champ.starts[role], consumables, biscuits) + \
-            league_utils.isg.wants.order(wants, boots)
+        league_utils.isg.wants.order(wants, boots)
     build = common.without(champ.builds[role], consumables, biscuits, early)
     options = common.without(league_utils.isg.wants.order(wants, all_),
                              build, early, consumables)

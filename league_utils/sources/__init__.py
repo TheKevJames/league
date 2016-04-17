@@ -32,18 +32,3 @@ def champion_gg(champ):
         champ.starts[role] += [
             models.Item(parse_id(x['src']), x['tooltip'])
             for x in soup.select(STARTS)]
-
-
-def lolflavor(champ):
-    # TODO: these builds are inserted into the page after load
-    url = 'http://www.lolflavor.com/champions/{}/'.format(champ.key)  # pylint: disable=W0612
-
-
-def metalol(champ):
-    # TODO: these builds are not role-specific
-    url = 'http://www.metalol.net/champions/{}'.format(champ.name)  # pylint: disable=W0612
-
-
-def probuilds(champ):
-    # TODO: these builds are not role-specific
-    url = 'http://probuilds.net/champions/details/{}'.format(champ.key)  # pylint: disable=W0612

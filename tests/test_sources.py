@@ -1,12 +1,15 @@
+import collections
+
 import league_utils.sources as sources
 
 
 class ChampionMock(object):
     def __init__(self, key):
         self.key = key
-        self.roles = []
-        self.builds = {}
-        self.starts = {}
+
+        self.roles = list()
+        self.builds = collections.defaultdict(list)
+        self.starts = collections.defaultdict(list)
 
 
 def test_champion_gg():
