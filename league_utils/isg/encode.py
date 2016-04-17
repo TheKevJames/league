@@ -1,23 +1,17 @@
 import json
 
 
-TAG = 'SFT'
-
-
 def item_set(title, map_, champion, blocks):
-    map_ = 'any'
     mode = 'any'
-    # TODO: specify mode/map
-    # if map_ == 'CS':
-    #     mode = 'ODIN'
-    # elif map_ == 'HA':
-    #     mode = 'ARAM'
-    # else:  # 'any', 'SR', or 'TA'
-    #     mode = 'CLASSIC'
-    #     # TODO: mode = 'any' ?
+    if map_ == 'CS':
+        mode = 'ODIN'
+    elif map_ == 'HA':
+        mode = 'ARAM'
+    else:
+        mode = 'CLASSIC'
 
     return json.dumps({
-        'title': '{} {}'.format(TAG, title),
+        'title': '{} (auto-generated)'.format(title),
         'map': map_,
         'mode': mode,
 
