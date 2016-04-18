@@ -17,6 +17,7 @@ import league_utils.api as api
 import league_utils.models as models
 import league_utils.isg as isg
 import league_utils.isg.encode as encode  # pylint: disable=W0611
+import league_utils.isg.groups as groups  # pylint: disable=W0611
 import league_utils.output as output
 import league_utils.sources as sources
 
@@ -30,11 +31,12 @@ def run():
             name = args['--champ'].lower()
 
         champs = api.get_champ(name)
+        items = groups.all_()
         for c in sorted(champs, key=lambda x: x['name']):
             champ = models.Champion(c['id'], c['key'], c['name'])
             sources.champion_gg(champ)
             for role in champ.roles:
-                item_set = isg.item_set(champ, role)
+                item_set = isg.item_set(champ, role, items)
                 if args['--write']:
                     # TODO: concurrent:
                     # with concurrent.futures.ProcessPoolExecutor() as exec:
