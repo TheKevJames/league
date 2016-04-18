@@ -27,6 +27,6 @@ def item_set(title, map_, champion, blocks):
 
         'blocks': [{
             'type': name,
-            'items': [{'count': 1, 'id': item.id} for item in items],
+            'items': [{'count': 1, 'id': str(item.id)} for item in items],
         } for name, items in blocks],
     })
