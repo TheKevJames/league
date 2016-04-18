@@ -23,7 +23,7 @@ import league_utils.sources as sources
 
 
 def run():
-    args = docopt.docopt(__doc__, version='0.2.1', argv=sys.argv[1:])
+    args = docopt.docopt(__doc__, version='0.2.2', argv=sys.argv[1:])
 
     if args['isg']:
         name = None
