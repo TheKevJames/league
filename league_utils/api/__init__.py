@@ -30,6 +30,11 @@ def get_champ(champ_filter=None):
 def get_item(item_filter=None):
     items = []
     for item in riot.static_get_item_list()['data'].values():
+        if 'name' not in item:
+            # Weird API response is weird.
+            # {'group': 'RelicBase', 'id': 3462}
+            continue
+
         items.append(dict(id=item['id'], name=item['name']))
         if not item_filter:
             continue

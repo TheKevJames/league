@@ -50,14 +50,16 @@ class Item(object):
     def _get_missing_tags(self):
         if 'Biscuit of Rejuvenation' in self.name:
             return ['Consumable', 'HealthRegen', 'ManaRegen']
+        elif "Death's Daughter" in self.name:
+            return ['Damage', 'Slow']
         elif 'Enchantment' in self.name:
             if any(x in self.name for x in ('Alacrity', 'Captain',
                                             'Distortion', 'Furor')):
                 return ['Boots']
+            elif 'Bloodrazor' in self.name:
+                return ['AttackSpeed', 'Jungle', 'OnHit']
             elif 'Cinderhulk' in self.name:
                 return ['Aura', 'Health', 'Jungle', 'SpellDamage']
-            elif 'Devourer' in self.name:
-                return ['AttackSpeed', 'Jungle', 'OnHit']
             elif 'Runeglaive' in self.name:
                 return ['CooldownReduction', 'Jungle', 'Mana', 'ManaRegen',
                         'OnHit', 'SpellDamage']
@@ -65,16 +67,14 @@ class Item(object):
                 return ['Jungle', 'NonbootsMovement', 'SpellDamage']
             elif 'Warrior' in self.name:
                 return ['CooldownReduction', 'Damage', 'Jungle']
-        elif 'Hex Core' in self.name:
-            return ['Mana', 'SpellDamage']
         elif 'Fire at Will' in self.name:
             return ['AttackSpeed', 'Damage']
-        elif "Death's Daughter" in self.name:
-            return ['Damage', 'Slow']
-        elif 'Raise Morale' in self.name:
-            return ['NonbootsMovement']
+        elif 'Hex Core' in self.name:
+            return ['Mana', 'SpellDamage']
         elif 'Poro-Snax' in self.name:
             return []
+        elif 'Raise Morale' in self.name:
+            return ['NonbootsMovement']
 
         raise Exception('No tags for %r.' % self)
 
