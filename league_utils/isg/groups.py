@@ -80,5 +80,5 @@ def enchantments():
         models.Item('3241', 'Enchantment: Alacrity'),
         models.Item('3671', 'Enchantment: Warrior'),
         models.Item('3673', 'Enchantment: Runic Echoes'),
-        models.Item('3674', 'Enchantment: Devourer'),
+        models.Item('3675', 'Enchantment: Bloodrazor'),
     ]
