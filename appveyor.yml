@@ -25,17 +25,17 @@ test_script:
   - "python setup.py test"
 
 after_test:
-  - IF %APPVEYOR_REPO_TAG% EQU True "pyinstaller --onefile league-utils.py"
-  - IF %APPVEYOR_REPO_TAG% EQU True ".\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64" --file dist\league-utils"
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (pyinstaller --onefile league-utils.py)
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64" --file dist\league-utils)
 
   - "rm -f C:\\.pypirc"
   - "echo '[server-login]' > C:\\.pypirc"
   - "echo 'username:%PYPI_USERNAME%' >> C:\\.pypirc"
   - "echo 'password:%PYPI_PASSWORD%' >> C:\\.pypirc"
 
-  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py register"
-  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py bdist_wininst upload"
-  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py bdist_msi upload"
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py register)
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py bdist_wininst upload)
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py bdist_msi upload)
 
   - "rm -f C:\\.pypirc"
 
