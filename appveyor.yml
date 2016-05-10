@@ -29,9 +29,9 @@ after_test:
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64.exe" --file dist\league-utils.exe)
 
   - "rm -f %HOME%\\.pypirc"
-  - "echo \"[server-login]\" > %HOME%\\.pypirc"
-  - "echo \"username:%PYPI_USERNAME%\" >> %HOME%\\.pypirc"
-  - "echo \"password:%PYPI_PASSWORD%\" >> %HOME%\\.pypirc"
+  - "echo [server-login] > %HOME%\\.pypirc"
+  - "echo username:%PYPI_USERNAME% >> %HOME%\\.pypirc"
+  - "echo password:%PYPI_PASSWORD% >> %HOME%\\.pypirc"
 
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py register)
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py bdist_wininst upload)
