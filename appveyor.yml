@@ -1,0 +1,43 @@
+environment:
+  global:
+    GITHUB_TOKEN:
+      secure: okx1kvyvLLF/KSkltebXSU/n3B8nm3rFBKEveGme3trpkMFYSrG8aV+8ajSFjXTz
+    HOME: "C:\\"
+    LEAGUE_TOKEN: dummy-token
+    PYPI_USERNAME: thekevjames-appveyor
+    PYPI_PASSWORD:
+      secure: clgxg8tVQ1E4xxMrg9MZ9w==
+
+install:
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+
+  - "curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/windows-amd64-github-release.zip > github-release.zip"
+  - "unzip github-release.zip"
+  - "rm -f github-release.zip"
+
+  - "pip install -r requirements.txt"
+  - "pip install -r requirements-dev.txt"
+
+build_script:
+  - "python setup.py build"
+
+test_script:
+  - "python setup.py test"
+
+after_test:
+  - IF %APPVEYOR_REPO_TAG% EQU True "pyinstaller --onefile league-utils.py"
+  - IF %APPVEYOR_REPO_TAG% EQU True ".\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64" --file dist\league-utils"
+
+  - "rm -f C:\\.pypirc"
+  - "echo '[server-login]' > C:\\.pypirc"
+  - "echo 'username:%PYPI_USERNAME%' >> C:\\.pypirc"
+  - "echo 'password:%PYPI_PASSWORD%' >> C:\\.pypirc"
+
+  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py register"
+  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py bdist_wininst upload"
+  - IF %APPVEYOR_REPO_TAG% EQU True "python setup.py bdist_msi upload"
+
+  - "rm -f C:\\.pypirc"
+
+artifacts:
+  - path: dist\*
