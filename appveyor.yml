@@ -26,7 +26,7 @@ test_script:
 
 after_test:
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (pyinstaller --onefile league-utils.py)
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64" --file dist\league-utils)
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64" --file dist\league-utils.exe)
 
   - "rm -f C:\\.pypirc"
   - "echo '[server-login]' > C:\\.pypirc"
