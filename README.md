@@ -1,5 +1,12 @@
 # LeagueUtils
 
+[![Version](https://img.shields.io/pypi/v/league-utils.svg?style=flat-square)](https://pypi.python.org/pypi/league-utils)
+[![Downloads](https://img.shields.io/pypi/dm/league-utils.svg?style=flat-square)](https://pypi.python.org/pypi/league-utils)
+[![Build Status](https://img.shields.io/circleci/project/TheKevJames/league.svg?style=flat-square)](https://circleci.com/gh/TheKevJames/league)
+[![Coverage Status](https://img.shields.io/coveralls/TheKevJames/league/master.svg?style=flat-square)](https://coveralls.io/github/TheKevJames/league?branch=master)
+[![Code Quality](https://img.shields.io/codacy/a8f370e55fc94d72b92b2b6615ce165b.svg?style=flat-square)](https://www.codacy.com/app/KevinJames/league)
+[![Requirements](https://img.shields.io/requires/github/TheKevJames/league.svg?style=flat-square)](https://requires.io/github/TheKevJames/league/requirements)
+
 LeagueUtils is a set of utilities for interacting with League of Legends data.
 Currently, it contains the League ISG (Item Set Generator).
 
