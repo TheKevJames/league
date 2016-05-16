@@ -5,6 +5,7 @@
 [![Build Status](https://img.shields.io/circleci/project/TheKevJames/league.svg?style=flat-square)](https://circleci.com/gh/TheKevJames/league)
 [![Coverage Status](https://img.shields.io/coveralls/TheKevJames/league/master.svg?style=flat-square)](https://coveralls.io/github/TheKevJames/league?branch=master)
 [![Code Quality](https://img.shields.io/codacy/a8f370e55fc94d72b92b2b6615ce165b.svg?style=flat-square)](https://www.codacy.com/app/KevinJames/league)
+[![Code Health](https://landscape.io/github/TheKevJames/league/master/landscape.svg?style=flat-square)](https://landscape.io/github/TheKevJames/league/master)
 [![Requirements](https://img.shields.io/requires/github/TheKevJames/league.svg?style=flat-square)](https://requires.io/github/TheKevJames/league/requirements)
 
 LeagueUtils is a set of utilities for interacting with League of Legends data.
