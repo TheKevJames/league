@@ -11,6 +11,31 @@
 LeagueUtils is a set of utilities for interacting with League of Legends data.
 Currently, it contains the League ISG (Item Set Generator).
 
+## ISG
+
+The Item Set Generator is designed to build recommended pages for every
+champion in every viable role. It does this by pulling date from Riot's API and
+from some third party sites, determining which build paths work best, and
+updating your League config with the results.
+
+### Usage
+
+The most common use case is to run
+
+    league-utils isg --write
+
+to install the item sets for every champion. The item sets will be installed
+beside the default Riot recommended pages, but if you have manually downloaded
+item sets into your config directory before, these may be overwritten. Make
+sure any such files have unique names before running this script! (eg. anything
+other than `${CHAMPION}_${ROLE}.json`).
+
+You can also run something like
+
+    league-utils isg --champ Rumble --no-write
+
+to dump info on that champion to your terminal.
+
 ## Setup
 
 ### Install from PyPI
@@ -46,31 +71,6 @@ supported, you can grab the binary for
 [the latest release](https://github.com/thekevjames/league/releases/latest) and
 just run that without installing anything. Note that using this method does not
 allow you to easily update.
-
-## ISG
-
-The Item Set Generator is designed to build recommended pages for every
-champion in every viable role. It does this by pulling date from Riot's API and
-from some third party sites, determining which build paths work best, and
-updating your League config with the results.
-
-### Usage
-
-The most common use case is to run
-
-    league-utils isg --write
-
-to install the item sets for every champion. The item sets will be installed
-beside the default Riot recommended pages, but if you have manually downloaded
-item sets into your config directory before, these may be overwritten. Make
-sure any such files have unique names before running this script! (eg. anything
-other than `${CHAMPION}_${ROLE}.json`).
-
-You can also run something like
-
-    league-utils isg --champ Rumble --no-write
-
-to dump info on that champion to your terminal.
 
 # FAQ
 

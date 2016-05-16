@@ -2,10 +2,19 @@
 import setuptools
 
 
+# I prefer Markdown to reStructuredText. PyPI does not.
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    long_description = ''
+
+
 setuptools.setup(
     name='league-utils',
     use_scm_version=True,
     description='League of Legends utilities, including an Item Set Generator',
+    long_description=long_description,
     keywords='league of legends game utilities item set generator isg',
     author='Kevin James',
     author_email='KevinJames@thekev.in',
