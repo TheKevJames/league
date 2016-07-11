@@ -75,6 +75,15 @@ class Item(object):
             return []
         elif 'Raise Morale' in self.name:
             return ['NonbootsMovement']
+        elif self.name in ('Entropy Field', 'Flash Zone', 'Port Pad',
+                           'Shield Totem', 'Siege Ballista', 'Siege Refund',
+                           'Siege Sight Warder', 'Siege Warp',
+                           'Siege Warp (Inactive)',
+                           'Tower Surge: Beam of Ruination',
+                           'Tower Surge: Firestorm Bulwark',
+                           'Vanguard Banner'):
+            # TODO: new game mode items?
+            return []
 
         raise Exception('No tags for %r.' % self)
 
