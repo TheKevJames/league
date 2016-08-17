@@ -75,10 +75,13 @@ class Item(object):
             return []
         elif 'Raise Morale' in self.name:
             return ['NonbootsMovement']
-        elif self.name in ('Entropy Field', 'Flash Zone', 'Port Pad',
+        elif self.name in ('Entropy Field', 'Flash Zone',
+                           'Nexus Siege: Siege Weapon Slot', 'Port Pad',
                            'Shield Totem', 'Siege Ballista', 'Siege Refund',
-                           'Siege Sight Warder', 'Siege Warp',
-                           'Siege Warp (Inactive)',
+                           'Siege Sight Warder', 'Siege Teleport',
+                           'Siege Teleport (Inactive)',
+                           'Siege Warp', 'Siege Warp (Inactive)',
+                           'Tower: Beam of Ruination', 'Tower: Storm Bulwark',
                            'Tower Surge: Beam of Ruination',
                            'Tower Surge: Firestorm Bulwark',
                            'Vanguard Banner'):
