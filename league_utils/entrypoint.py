@@ -1,9 +1,12 @@
 """usage:
+league-utils datascience <name>
 league-utils isg [--champ=<champ>] [--write | --no-write]
 league-utils -h | --help
 
 options:
+    datascience            Run a data science experiment
     isg                    Use the item set generator
+    <name>                 Data science experiment to run.
     --champ=<champ>        Get info for only this champion.
     --write --no-write     Write to file or print to screen.
     -v --version           Show the version.
@@ -14,6 +17,7 @@ import sys
 import docopt
 
 import league_utils.api as api
+import league_utils.data_science as data_science
 import league_utils.models as models
 import league_utils.isg as isg
 import league_utils.isg.encode as encode  # pylint: disable=W0611
@@ -24,6 +28,9 @@ import league_utils.sources as sources
 
 def run():
     args = docopt.docopt(__doc__, version='0.2.11', argv=sys.argv[1:])
+
+    if args['datascience']:
+        return data_science.run(args['<name>'])
 
     if args['isg']:
         name = None

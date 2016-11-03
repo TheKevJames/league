@@ -12,3 +12,5 @@ bin/linux/amd64/github-release
 league-utils.spec
 .coverage
 .junitxml
+
+gold-items-support.png

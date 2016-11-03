@@ -1,6 +1,112 @@
-from riotwatcher import game_maps
-
 import league_utils.api as api
+from .map import Map
+
+
+class ItemEffects(object):
+    def __init__(self, item_id, payload):
+        self.item_id = item_id
+        self._payload = payload
+
+        if self.item_id == 3096:
+            # Nomad's Medallion
+            self.cdr = int(self._payload['Effect3Amount'])  # or 4?
+            self.gold_per_farm = int(self._payload['Effect2Amount'])
+            self.gold_per_ten = int(self._payload['Effect1Amount'])
+            self.health_per_farm = int(self._payload['Effect4Amount'])  # or 3?
+        elif self.item_id == 3097:
+            # Targon's Brace
+            self.charge_interval = int(self._payload['Effect3Amount'])
+            self.execute_threshold = lambda level: \
+                (int(self._payload['Effect1Amount']) +
+                 level * int(self._payload['Effect6Amount']))
+            self.gold_per_ten = int(self._payload['Effect5Amount'])
+            self.health_per_farm = int(self._payload['Effect2Amount'])
+            self.max_charges = int(self._payload['Effect4Amount'])
+        elif self.item_id == 3098:
+            # Frostfang
+            self.damage_per_poke = int(self._payload['Effect2Amount'])  # 1?
+            self.disable_time = int(self._payload['Effect3Amount'])
+            self.full_charge_interval = int(self._payload['Effect5Amount'])
+            self.gold_per_poke = int(self._payload['Effect1Amount'])  # 2?
+            self.gold_per_ten = int(self._payload['Effect6Amount'])
+            self.max_charges = int(self._payload['Effect4Amount'])
+
+            self.charge_interval = self.full_charge_interval / self.max_charges
+        elif self.item_id == 3301:
+            # Ancient Coin
+            self.gold_per_farm = int(self._payload['Effect1Amount'])
+            self.health_per_farm = int(self._payload['Effect2Amount'])
+        elif self.item_id == 3302:
+            # Relic Shield
+            self.charge_interval = 40
+            self.execute_threshold = lambda level: \
+                (int(self._payload['Effect1Amount']) +
+                 level * int(self._payload['Effect4Amount']))
+            self.gold_per_ten = int(self._payload['Effect3Amount'])
+            self.health_per_farm = int(self._payload['Effect2Amount'])
+            self.max_charges = 2
+        elif self.item_id == 3303:
+            # Spellthief's Edge
+            self.damage_per_poke = int(self._payload['Effect1Amount'])
+            self.disable_time = int(self._payload['Effect3Amount'])
+            self.full_charge_interval = int(self._payload['Effect5Amount'])
+            self.gold_per_poke = int(self._payload['Effect2Amount'])
+            self.gold_per_ten = int(self._payload['Effect6Amount'])
+            self.max_charges = int(self._payload['Effect4Amount'])
+
+            self.charge_interval = self.full_charge_interval / self.max_charges
+
+    def gold_at_time(self, time_current, time_purchase=0, **kwargs):
+        import league_utils.data_science.gold as gold
+
+        if self.item_id == 3096:
+            # Nomad's Medallion
+            return gold.maximum_passively_generated_from_farm(
+                kwargs['lane'], self.gold_per_farm, time_current,
+                farm_rate=kwargs['adc_farm_rate'], time_purchase=time_purchase)
+        elif self.item_id == 3097:
+            # Targon's Brace
+            passive = gold.passively_generated(
+                self.gold_per_ten, time_current, time_purchase=time_purchase)
+            farm = gold.maximum_minion_kill(
+                kwargs['lane'], time_current,
+                kill_interval=self.charge_interval,
+                kill_rate=kwargs['support_farm_rate'],
+                time_purchase=time_purchase)
+            return passive + farm
+        elif self.item_id == 3098:
+            # Frostfang
+            passive = gold.passively_generated(
+                self.gold_per_ten, time_current, time_purchase=time_purchase)
+            poke = gold.poking(
+                self.gold_per_poke, self.max_charges,
+                self.full_charge_interval, time_current,
+                poke_rate=kwargs['support_poke_rate'],
+                time_purchase=time_purchase)
+            return passive + poke
+        elif self.item_id == 3301:
+            # Ancient Coin
+            return gold.maximum_passively_generated_from_farm(
+                kwargs['lane'], self.gold_per_farm, time_current,
+                farm_rate=kwargs['adc_farm_rate'])
+        elif self.item_id == 3302:
+            # Relic Shield
+            passive = gold.passively_generated(self.gold_per_ten, time_current)
+            farm = gold.maximum_minion_kill(
+                kwargs['lane'], time_current,
+                kill_interval=self.charge_interval,
+                kill_rate=kwargs['support_farm_rate'])
+            return passive + farm
+        elif self.item_id == 3303:
+            # Spellthief's Edge
+            passive = gold.passively_generated(self.gold_per_ten, time_current)
+            poke = gold.poking(
+                self.gold_per_poke, self.max_charges,
+                self.full_charge_interval, time_current,
+                poke_rate=kwargs['support_poke_rate'])
+            return passive + poke
+
+        raise Exception("No gold/time function for '{}'.".format(self.item_id))
 
 
 class Item(object):
@@ -12,6 +118,8 @@ class Item(object):
         self._builds_from = None
         self._champion = None
         self._champion_unlocked = False
+        self._cost = None
+        self._effects = None
         # TODO: do something with these
         #  ["Butcher's Bridge", 'Howling Abyss', "Summoner's Rift",
         #   'The Crystal Scar', 'The Proving Grounds', 'Twisted Treeline']
@@ -94,15 +202,11 @@ class Item(object):
     def _load_riot(self):
         info = api.riot.static_get_item(self.id, item_data='all')
 
-        self._name = info['name']
-
         self._builds_from = [Item(x) for x in info.get('from', list())]
-
-        self._maps = set()
-        for map_ in [k for k, v in info['maps'].items() if v]:
-            for game_map in [g for g in game_maps if str(g['map_id']) == map_]:
-                self._maps.add(game_map['name'])
-
+        self._cost = int(info['gold']['total'])
+        self._effects = ItemEffects(self.id, info['effect'])
+        self._maps = {Map(k) for k, v in info['maps'].items() if v}
+        self._name = info['name']
         self._stats = info['stats']
 
         try:
@@ -120,6 +224,18 @@ class Item(object):
         if isinstance(self._builds_from, type(None)):
             self._load_riot()
         return self._builds_from
+
+    @property
+    def cost(self):
+        if not self._cost:
+            self._load_riot()
+        return self._cost
+
+    @property
+    def effects(self):
+        if not self._effects:
+            self._load_riot()
+        return self._effects
 
     @property
     def maps(self):

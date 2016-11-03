@@ -1,6 +1,7 @@
-class Role(object):
+class Lane(object):
     def __init__(self, name):
         self.name = name.lower()
+        assert self.name in ('bot', 'mid', 'top')
 
     def __repr__(self):
         return '[{}]'.format(self.name)
@@ -13,3 +14,13 @@ class Role(object):
 
     def __hash__(self):
         return hash(self.name)
+
+    @property
+    def nexus_to_center_distance(self):
+        if self.name == 'mid':
+            return 7800
+
+        return 10725
+
+    def nexus_to_center_time(self, speed):
+        return self.nexus_to_center_distance / speed

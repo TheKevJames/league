@@ -13,4 +13,4 @@ def test_equality():
 
 
 def test_repr():
-    assert str(models.Role('Jungle')) == '[Jungle]'
+    assert str(models.Role('Jungle')) == '[jungle]'

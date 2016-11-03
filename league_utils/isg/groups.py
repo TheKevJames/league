@@ -51,10 +51,10 @@ def consumables():
 
 def dorans():
     return [
-        ('1054', "Doran's Shield"),
-        ('1055', "Doran's Blade"),
-        ('1056', "Doran's Ring"),
-        ('1083', 'Cull'),
+        models.Item('1054', "Doran's Shield"),
+        models.Item('1055', "Doran's Blade"),
+        models.Item('1056', "Doran's Ring"),
+        models.Item('1083', 'Cull'),
     ]
 
 
