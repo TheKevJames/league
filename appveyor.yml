@@ -34,7 +34,7 @@ after_test:
 
   - "rm -f %HOME%\\.pypirc"
 
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release release --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "LeagueUtils" --descripion "description empty for this release" --pre-release || echo "Release already exists... race condition?")
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release release --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "LeagueUtils" --pre-release || type nul)
 
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (pyinstaller --onefile league-utils.py)
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64.exe" --file dist\league-utils.exe)
