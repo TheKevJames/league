@@ -4,10 +4,6 @@ machine:
 
 dependencies:
   override:
-    - curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2 > github-release.tar.bz2
-    - tar xjf github-release.tar.bz2
-    - rm -f github-release.tar.bz2
-
     - pip install -r requirements.txt
     - pip install -r requirements-dev.txt
     - pip install coveralls
@@ -18,6 +14,7 @@ test:
   override:
     - python setup.py test
     - tox
+
   post:
     - mv htmlcov $CIRCLE_ARTIFACTS/coverage
     - mv .junitxml $CIRCLE_TEST_REPORTS/junit.xml
@@ -28,7 +25,10 @@ deployment:
   release:
     tag: /[0-9]+\.[0-9]+\.[0-9]+/
     commands:
-      - rm -f ~/.pypirc
+      - curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2 > github-release.tar.bz2
+      - tar xjf github-release.tar.bz2
+      - rm -f github-release.tar.bz2
+
       - echo "[server-login]" > ~/.pypirc
       - echo "username:$PYPI_USERNAME" >> ~/.pypirc
       - echo "password:$PYPI_PASSWORD" >> ~/.pypirc
@@ -44,7 +44,7 @@ deployment:
 
       - rm -f ~/.pypirc
 
-      - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" --pre-release
+      - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" --pre-release || echo "Release already exists... race condition?"
 
       - pyinstaller --onefile league-utils.py
       - ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "league-utils-linux-amd64" --file dist/league-utils

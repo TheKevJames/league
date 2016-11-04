@@ -11,10 +11,6 @@ environment:
 install:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 
-  - "curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/windows-amd64-github-release.zip > github-release.zip"
-  - "unzip github-release.zip"
-  - "rm -f github-release.zip"
-
   - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
 
@@ -25,10 +21,10 @@ test_script:
   - "python setup.py test"
 
 after_test:
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (pyinstaller --onefile league-utils.py)
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64.exe" --file dist\league-utils.exe)
+  - "curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/windows-amd64-github-release.zip > github-release.zip"
+  - "unzip github-release.zip"
+  - "rm -f github-release.zip"
 
-  - "rm -f %HOME%\\.pypirc"
   - "echo [server-login] > %HOME%\\.pypirc"
   - "echo username:%PYPI_USERNAME% >> %HOME%\\.pypirc"
   - "echo password:%PYPI_PASSWORD% >> %HOME%\\.pypirc"
@@ -37,6 +33,11 @@ after_test:
   - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (python setup.py bdist_wininst upload)
 
   - "rm -f %HOME%\\.pypirc"
+
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release release --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "LeagueUtils" --descripion "description empty for this release" --pre-release || echo "Release already exists... race condition?")
+
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (pyinstaller --onefile league-utils.py)
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (.\bin\windows\amd64\github-release upload --user TheKevJames --repo league --tag %APPVEYOR_REPO_TAG_NAME% --name "league-utils-windows-amd64.exe" --file dist\league-utils.exe)
 
 artifacts:
   - path: dist\*
