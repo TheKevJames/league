@@ -204,7 +204,7 @@ class Item(object):
 
         self._builds_from = [Item(x) for x in info.get('from', list())]
         self._cost = int(info['gold']['total'])
-        self._effects = ItemEffects(self.id, info['effect'])
+        self._effects = ItemEffects(self.id, info.get('effect', {}))
         self._maps = {Map(k) for k, v in info['maps'].items() if v}
         self._name = info['name']
         self._stats = info['stats']
