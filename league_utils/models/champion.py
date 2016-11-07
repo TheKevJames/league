@@ -35,6 +35,11 @@ class Champion(object):
         self._name = info['name']
         self._stats = info['stats']
 
+        # info['recommended']  # TODO: recommended items
+        # info['partype']      # TODO: resource type
+        # info['tags']         # TODO: tags
+        # info['spells']       # TODO: qwer
+
     @property
     def key(self):
         if not self._key:
@@ -52,3 +57,7 @@ class Champion(object):
         if not self._stats:
             self._load_riot()
         return self._stats
+
+    def dump(self):
+        print(self)
+        print('  {}'.format(self.stats))

@@ -276,3 +276,15 @@ class Item(object):
             else:
                 self._champion_unlocked = True
         return self._champion
+
+    def dump(self):
+        if self.builds_from:
+            print('{} ({})'.format(
+                self, ' + '.join((str(i) for i in self.builds_from))))
+        else:
+            print(self)
+        print('  Costs: {}g'.format(self.cost))
+        print('  Provides: {}'.format(self.stats))
+        print('  Tags: {}'.format(self.tags))
+        print('  Available on: {}'.format(self.maps))
+        # print('  {}'.format(self.effects))

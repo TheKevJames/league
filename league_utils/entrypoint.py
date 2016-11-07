@@ -1,13 +1,16 @@
 """usage:
 league-utils datascience <name>
+league-utils info (--champ=<champ> | --item=<item>)
 league-utils isg [--champ=<champ>] [--write | --no-write]
 league-utils -h | --help
 
 options:
     datascience            Run a data science experiment
+    info                   Show API info on object.
     isg                    Use the item set generator
     <name>                 Data science experiment to run.
     --champ=<champ>        Get info for only this champion.
+    --item=<item>          Get info for only this item.
     --write --no-write     Write to file or print to screen.
     -v --version           Show the version.
     -h --help              Show this screen.
@@ -31,6 +34,20 @@ def run():
 
     if args['datascience']:
         return data_science.run(args['<name>'])
+
+    if args['info']:
+        if args['--champ']:
+            name = args['--champ'].lower()
+            champ = api.get_champ(name)[0]
+            champ = models.Champion(champ['id'], champ['key'], champ['name'])
+            champ.dump()
+        elif args['--item']:
+            name = args['--item'].lower()
+            item = api.get_item(name)[0]
+            item = models.Item(item['id'], item['name'])
+            item.dump()
+
+        return
 
     if args['isg']:
         name = None
