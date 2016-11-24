@@ -13,14 +13,14 @@ def test_biscuits():
 
 def test_consumables():
     consumables = isg.groups.consumables()
-    assert len(consumables) == 10
-
-
-def test_enchantments():
-    enchantments = isg.groups.enchantments()
-    assert len(enchantments) == 21
+    assert len(consumables) == 12
 
 
 def test_dorans():
     dorans = isg.groups.dorans()
-    assert len(dorans) == 4
+    assert len(dorans) == 7
+
+
+def test_enchantments():
+    enchantments = isg.groups.enchantments()
+    assert len(enchantments) == 16
