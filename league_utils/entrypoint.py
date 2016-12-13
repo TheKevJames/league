@@ -33,7 +33,7 @@ import league_utils.sources as sources
 
 
 def run():
-    args = docopt.docopt(__doc__, version='0.3.1', argv=sys.argv[1:])
+    args = docopt.docopt(__doc__, version='0.3.2', argv=sys.argv[1:])
 
     if args['datascience']:
         return data_science.run(args['<name>'])
