@@ -2,7 +2,8 @@ import os
 import platform
 
 
-def get_base_dir(system):
+def get_base_dir(system=None):
+    system = system or platform.system()
     if system == 'Windows':
         return os.path.join('C:', 'Riot Games', 'League of Legends')
     elif system == 'Linux':
@@ -19,12 +20,12 @@ def get_base_dir(system):
         raise Exception('Platform "{}" not supported.'.format(system))
 
 
-config_dir = os.path.join(get_base_dir(platform.system()), 'Config')
-champions_dir = os.path.join(config_dir, 'Champions')
+def build_path(base_dir):
+    return os.path.join(base_dir, 'Config', 'Champions')
 
 
-def to_file(champ, role, item_set):
-    champion_dir = os.path.join(champions_dir, champ.key, 'Recommended')
+def to_file(champ_dir, champ, role, item_set):
+    champion_dir = os.path.join(champ_dir, champ.key, 'Recommended')
 
     try:
         os.makedirs(champion_dir)
