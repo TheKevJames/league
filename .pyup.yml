@@ -1,0 +1,3 @@
+requirements:
+  - requirements-dev.txt:
+      pin: False
