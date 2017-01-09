@@ -88,3 +88,12 @@ with your token before running this app.
 This project probably won't make your computer explode, make your girlfriend
 leave you, or get you fired from your job, but I make no guarantees that
 blindly following its advice won't drop your ELO. You've been warned.
+
+# API Server
+This project currently contains a very beta version of a web server. For now,
+anyone that isn't me can ignore these deployment instructions:
+
+    curl https://raw.githubusercontent.com/TheKevJames/league/master/docker-compose.yml > docker-compose.yml
+    mkdir -p api  # docker-compose oddity
+    docker-compose pull
+    docker-compose up -d
