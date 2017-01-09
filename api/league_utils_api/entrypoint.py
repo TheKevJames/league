@@ -30,6 +30,7 @@ async def efficiency(request):
                     'worth': str(await item.worth),
 
                     'ignored_stats': (await item.ignored_stats),
+                    'included_stats': (await item.included_stats),
                 }
             }]}))
     except asyncio.CancelledError:

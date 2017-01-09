@@ -34,6 +34,7 @@ class Item:
 
         self._efficiency = None
         self._ignored_stats = {}
+        self._included_stats = {}
         self._worth = None
 
         self._loaded = False
@@ -65,6 +66,11 @@ class Item:
         return self._ignored_stats
 
     @property
+    async def included_stats(self):
+        await self.load_data()
+        return self._included_stats
+
+    @property
     async def name(self):
         await self.load_data()
         return self._name
@@ -83,6 +89,8 @@ class Item:
             for stat, value in self._stats.items():
                 if ITEM_WORTH[stat] == 0:
                     self._ignored_stats[stat] = value
+                else:
+                    self._included_stats[stat] = value
         return self._worth
 
     async def load_data(self):
