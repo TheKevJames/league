@@ -18,11 +18,11 @@ ITEMS = {}
 
 
 async def efficiency(request):
-    iid = int(request.match_info['id'])
-    if not iid in ITEMS:
-        ITEMS[iid] = await Item.from_id(iid)
-
     try:
+        iid = int(request.match_info['id'])
+        if not iid in ITEMS:
+            ITEMS[iid] = await Item.from_id(iid)
+
         return aiohttp.web.Response(status=200, text=json.dumps({
             'data': [{
                 'type': 'item',

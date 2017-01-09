@@ -1,15 +1,16 @@
 import asyncio
 import logging
-import os
 import re
 
 import aiohttp
 
-from ..constants import ITEM_DESCRIPTION_STAT_KEYS, ITEM_WORTH
+from ..riot.constants import (
+    API_ITEM,
+    API_ITEMS,
+    ITEM_DESCRIPTION_STAT_KEYS,
+    ITEM_WORTH,
+)
 
-
-LEAGUE_TOKEN = os.environ['LEAGUE_TOKEN']
-STATIC_ITEM_API = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/item'
 
 HTML_TAG = re.compile('<[^<]+?>')
 ON_HIT_REGEX = re.compile(
@@ -35,21 +36,6 @@ class Item:
 
         self._loaded = False
         return self
-
-    @classmethod
-    async def from_name(cls, name):
-        url = '{}?api_key={}&itemData=all'.format(STATIC_ITEM_API,
-                                                  LEAGUE_TOKEN)
-
-        async with aiohttp.ClientSession() as c, c.get(url) as response:
-            assert response.status == 200
-
-            data = (await response.json())['data']
-            item = [x for x in data.values() if x.get('name') == name]
-            if not item:
-                raise KeyError('Could not look up item "{}"'.format(name))
-
-            return await Item.from_id(item[0]['id'])
 
     @property
     async def cost(self):
@@ -93,10 +79,8 @@ class Item:
         if self._loaded:
             return
 
-        url = '{}/{}?api_key={}&itemData=all'.format(STATIC_ITEM_API, self.iid,
-                                                     LEAGUE_TOKEN)
-
         try:
+            url = API_ITEM.format(self.iid)
             async with aiohttp.ClientSession() as c, c.get(url) as response:
                 assert response.status == 200
                 data = await response.json()

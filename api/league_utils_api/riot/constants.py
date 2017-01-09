@@ -1,3 +1,13 @@
+import os
+
+
+TOKEN = os.environ['RIOT_TOKEN']
+
+API_STATIC_DATA = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2'
+API_ITEMS = API_STATIC_DATA + '/item?itemData=all&api_key=' + TOKEN
+API_ITEM = API_STATIC_DATA + '/item/{}?itemData=all&api_key=' + TOKEN
+
+
 ITEM_DESCRIPTION_STAT_KEYS = {
     'Ability Power per level': 'Scaling{}MagicDamageMod',
     'Ability Power': '{}MagicDamageMod',
@@ -52,7 +62,6 @@ IW2 = {
     'PercentLifeStealMod': (900 - IW1['FlatPhysicalDamageMod'] * 15) / 0.10,  # vampiric sceptre - AD
     'PercentMagicPenetrationMod': (1100 - IW1['FlatMovementSpeedMod'] * 45) / 0.15,  # sorcerer's shoes - MS
     'PercentMovementSpeedMod': (850 - IW1['FlatMagicDamageMod'] * 30) / 0.05,  # aether wisp - AP
-    'PercentPhysicalDamageMod': (1300 - IW1['FlatPhysicalDamageMod'] * 25) / 0.3,  # last whisper - AD
 }
 IW2F = {
     'FlatHPRegenMod': (450 - IW1['FlatHPPoolMod'] * 80) / 1.2,  # doran's shield - HP
