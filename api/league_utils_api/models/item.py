@@ -149,11 +149,11 @@ class Item:
                 key = 'FlatOnHitMod'
                 value = int(dvalue)
             elif passive.startswith('Grants'):
-                # TODO: unfuck this
-                stacks = 10
-                self._stats['FlatHPPoolMod'] = 20 * stacks
-                self._stats['FlatMPPoolMod'] = 10 * stacks
-                self._stats['FlatMagicDamageMod'] = 4 * stacks
+                # TODO: unfuck this, also provide with/without this
+                # stacks = 10
+                # self._stats['FlatHPPoolMod'] = 20 * stacks
+                # self._stats['FlatMPPoolMod'] = 10 * stacks
+                # self._stats['FlatMagicDamageMod'] = 4 * stacks
                 return
             elif passive.startswith('Restores'):
                 _, dvalue, dkey = passive.split(' ', 2)
