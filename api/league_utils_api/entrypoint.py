@@ -14,25 +14,22 @@ SENTRY_DSN = os.environ.get('SENTRY_DSN')
 logger = logging.getLogger('test')
 sentry = raven.Client(dsn=SENTRY_DSN)
 
-ITEMS = {}
-
 
 async def efficiency(request):
     try:
         iid = int(request.match_info['id'])
-        if not iid in ITEMS:
-            ITEMS[iid] = await Item.from_id(iid)
+        item = await Item.from_id(iid)
 
         return aiohttp.web.Response(status=200, text=json.dumps({
             'data': [{
                 'type': 'item',
                 'id': iid,
                 'attributes': {
-                    'cost': str(await ITEMS[iid].cost),
-                    'efficiency': str(await ITEMS[iid].efficiency),
-                    'worth': str(await ITEMS[iid].worth),
+                    'cost': str(await item.cost),
+                    'efficiency': str(await item.efficiency),
+                    'worth': str(await item.worth),
 
-                    'ignored_stats': (await ITEMS[iid].ignored_stats),
+                    'ignored_stats': (await item.ignored_stats),
                 }
             }]}))
     except asyncio.CancelledError:
