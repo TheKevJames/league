@@ -31,6 +31,7 @@ async def efficiency(request):
                     'cost': str(await ITEMS[iid].cost),
                     'efficiency': str(await ITEMS[iid].efficiency),
                     'worth': str(await ITEMS[iid].worth),
+                    'ignored_stats': (await ITEMS[iid].ignored_stats),
                 }
             }]}))
     except asyncio.CancelledError:

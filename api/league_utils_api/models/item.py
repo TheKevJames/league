@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import uuid
 
 import aiohttp
 
@@ -32,6 +33,7 @@ class Item:
         self._stats = {}
 
         self._efficiency = None
+        self._ignored_stats = {}
         self._worth = None
 
         self._loaded = False
@@ -56,6 +58,11 @@ class Item:
             except ZeroDivisionError:
                 self._efficiency = 0
         return self._efficiency
+
+    @property
+    async def ignored_stats(self):
+        await self.load_data()
+        return self._ignored_stats
 
     @property
     async def name(self):
@@ -103,16 +110,28 @@ class Item:
             else:
                 return 'Flat', float(value[1:])
 
-        # async def from_consumable(consumable):
-        #     if consumable.startswith('Restores'):
-        #         # TODO: can potions be considered gold efficient?
-        #         pass
-        #     elif consumable.startswith('Grants +'):
-        #         # TODO: can elixirs be considered gold efficient?
-        #         pass
-        #     else:
-        #         # oracle, poro, ward
-        #         return
+        async def from_active(title, description):
+            description = description.strip(' .')
+
+            # TODO
+            self._ignored_stats[title.strip(':')] = description
+
+        async def from_aura(title, description):
+            description = description.strip(' .')
+
+            # TODO
+            self._ignored_stats[title.strip(':')] = description
+
+        async def from_consumable(consumable):
+            if consumable.startswith('Restores'):
+                # TODO: can potions be considered gold efficient?
+                self._ignored_stats[str(uuid.uuid4())[:8]] = consumable
+            elif consumable.startswith('Grants +'):
+                # TODO: can elixirs be considered gold efficient?
+                self._ignored_stats[str(uuid.uuid4())[:8]] = consumable
+            else:
+                # oracle, poro, ward
+                self._ignored_stats[str(uuid.uuid4())[:8]] = consumable
 
         async def from_passive(passive):
             passive = passive.strip()
@@ -127,8 +146,11 @@ class Item:
                 key = 'FlatOnHitMod'
                 value = int(dvalue)
             elif passive.startswith('Grants'):
-                # TODO: roa
-                # logger.error(passive)
+                # TODO: unfuck this
+                stacks = 10
+                self._stats['FlatHPPoolMod'] = 20 * stacks
+                self._stats['FlatMPPoolMod'] = 10 * stacks
+                self._stats['FlatMagicDamageMod'] = 4 * stacks
                 return
             elif passive.startswith('Restores'):
                 _, dvalue, dkey = passive.split(' ', 2)
@@ -139,10 +161,12 @@ class Item:
                 else:
                     # TODO: some of these are parseable
                     # logger.error(passive)
+                    self._ignored_stats[dkey] = dvalue
                     return
             else:
                 # TODO: some of these are parseable
                 # logger.error(passive)
+                self._ignored_stats[str(uuid.uuid4())[:8]] = passive
                 return
 
             self._stats[key] = value
@@ -217,16 +241,39 @@ class Item:
                 # TODO: some of these are parseable
                 # logger.error(title)
                 # logger.error(description)
+                self._ignored_stats[title.strip(':')] = description
                 return
 
             self._stats[key] = value
 
         d = self._description
 
-        # if '<consumable>' in d:
-        #    idx = d.find('</consumable>')
-        #    consumable = d[idx + 14:d.find('<br>', idx)]
-        #    await from_consumable(consumable)
+        if '<active>' in d:
+            idx = d.find('<active>')
+            active_end_idx = d.find('</active>', idx)
+            description_end_idx = d.find('<br>', active_end_idx)
+            if description_end_idx == -1:
+                description_end_idx = None
+
+            title = d[idx + 8:active_end_idx]
+            description = d[active_end_idx + 9:description_end_idx]
+            await from_active(title, description)
+
+        if '<aura>' in d:
+            idx = d.find('<aura>')
+            aura_end_idx = d.find('</aura>', idx)
+            description_end_idx = d.find('<br>', aura_end_idx)
+            if description_end_idx == -1:
+                description_end_idx = None
+
+            title = d[idx + 6:aura_end_idx]
+            description = d[aura_end_idx + 7:description_end_idx]
+            await from_aura(title, description)
+
+        if '<consumable>' in d:
+           idx = d.find('</consumable>')
+           consumable = d[idx + 14:d.find('<br>', idx)]
+           await from_consumable(consumable)
 
         if '<stats>' in d:
             stats = d[d.find('<stats>') + 7:d.find('</stats>')]
