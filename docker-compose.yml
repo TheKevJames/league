@@ -5,7 +5,7 @@ services:
     build: api/.
     image: thekevjames/league-utils-api
     environment:
-      - LEAGUE_TOKEN=${LEAGUE_TOKEN}
+      - RIOT_TOKEN=${LEAGUE_TOKEN}
       - SENTRY_DSN=${SENTRY_DSN_LEAGUE}
     ports:
       - "28006:8080"
