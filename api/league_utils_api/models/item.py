@@ -80,6 +80,9 @@ class Item:
         if self._worth is None:
             self._worth = sum(ITEM_WORTH[k] * v
                               for k, v in self._stats.items())
+            for stat, value in self._stats.items():
+                if ITEM_WORTH[stat] == 0:
+                    self._ignored_stats[stat] = value
         return self._worth
 
     async def load_data(self):

@@ -4,7 +4,7 @@ import os
 TOKEN = os.environ['RIOT_TOKEN']
 
 API_STATIC_DATA = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2'
-API_ITEMS = API_STATIC_DATA + '/item?itemData=all&api_key=' + TOKEN
+API_ITEMS = API_STATIC_DATA + '/item?itemListData=all&api_key=' + TOKEN
 API_ITEM = API_STATIC_DATA + '/item/{}?itemData=all&api_key=' + TOKEN
 
 
@@ -71,6 +71,7 @@ IW2F = {
 IW3 = {
     'FlatLethalityMod': (1100 - IW1['FlatPhysicalDamageMod'] * 25 - IW2['FlatMovementSpeedOutOfCombatMod'] * 20) / 10,  # serrated dirk - AD - MSOOC
     'FlatMagicPenetrationMod': (1500 - IW1['FlatMagicDamageMod'] * 25 - IW1['FlatHPPoolMod'] * 200) / 15,  # haunting guise - AP - HP
+    'PercentHealAndShieldMod': (800 - IW1['PercentMPRegenMod'] * 0.5 - IW2['PercentCooldownMod'] * 0.1) / 0.08,  # forbidden idol - MPR% - CDR
 }
 IWARB = {
     'FlatMPRegenMod': 10,  # guardian's orb - HP - AP (too good!)
@@ -85,7 +86,6 @@ IWARB = {
 IWMISSING = {
     'FlatGoldPer10Mod': 0,
     'PercentDamageReductionCritMod': 0,
-    'PercentHealAndShieldMod': 0,
 }
 
 ITEM_WORTH = {
