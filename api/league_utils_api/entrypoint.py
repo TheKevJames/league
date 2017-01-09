@@ -46,7 +46,7 @@ async def efficiency(request):
 
 
 async def ping(_request):
-    return aiohttp.web.Response(text='pong')
+    return aiohttp.web.Response(text='ok')
 
 
 def run():
