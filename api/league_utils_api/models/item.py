@@ -5,6 +5,8 @@ import uuid
 
 import aiohttp
 
+from ..error import APIError
+from ..monitor import SENTRY
 from ..riot.constants import (
     API_ITEM,
     API_ITEMS,
@@ -104,7 +106,7 @@ class Item:
                 data = await response.json()
         except Exception as e:
             logger.exception(e)
-            raise KeyError('Could not look up item "{}"'.format(self.iid))
+            raise APIError('Could not look up item "{}"'.format(self.iid))
 
         self._cost = int(data.get('gold', {}).get('total', 0))
         self._description = data.get('description', "Missing description.")
@@ -191,11 +193,30 @@ class Item:
             if dvalue == '+':
                 # Sometimes used as a bullet point
                 return
+            elif dvalue == '-':
+                # Sometimes split from value
+                dvalue1, dkey = dkey.split(' ', 1)
+                try:
+                    if dvalue1[-1] == '%':
+                        fvalue1 = float(dvalue1[:-1])
+                    else:
+                        fvalue1 = float(dvalue1)
+                    dvalue += dvalue1
+                except:
+                    # ...and sometimes used as a dash.
+                    return
 
-            key, value = parse_value(dvalue)
-            key = ITEM_DESCRIPTION_STAT_KEYS[dkey].format(key)
+            try:
+                key, value = parse_value(dvalue)
+                key = ITEM_DESCRIPTION_STAT_KEYS[dkey].format(key)
 
-            self._stats[key] = value
+                self._stats[key] = value
+            except Exception as e:
+                logger.exception(e)
+                SENTRY.captureException()
+
+                self._ignored_stats[dkey] = dvalue
+
 
         async def from_unique(title, description):
             if '<' in description:

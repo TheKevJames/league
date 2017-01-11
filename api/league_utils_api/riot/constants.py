@@ -21,6 +21,8 @@ ITEM_DESCRIPTION_STAT_KEYS = {
     'Base Mana Regen': '{}MPRegenMod',
     'Bonus Health': '{}HPPoolMod',
     'Heal and Shield Power': '{}HealAndShieldMod',
+    'increased cooldown': '{}CooldownMod',  # I would have assumed this should
+                                            # be negative... but no. See i#3363
     'Cooldown Reduction': '{}CooldownMod',
     'Critical Strike Chance': '{}CritChanceMod',
     'Damage taken from Critical Strikes': '{}DamageReductionCritMod',
@@ -86,6 +88,7 @@ IWARB = {
 IWMISSING = {
     'FlatGoldPer10Mod': 0,
     'PercentDamageReductionCritMod': 0,
+    'PercentPhysicalDamageMod': 0,
 }
 
 ITEM_WORTH = {

@@ -1,18 +1,15 @@
 import asyncio
 import json
 import logging
-import os
 
 import aiohttp.web
-import raven
 
+from .error import APIError
 from .models import Item
+from .monitor import SENTRY
 
-
-SENTRY_DSN = os.environ.get('SENTRY_DSN')
 
 logger = logging.getLogger('test')
-sentry = raven.Client(dsn=SENTRY_DSN)
 
 
 async def efficiency(request):
@@ -35,7 +32,7 @@ async def efficiency(request):
             }]}))
     except asyncio.CancelledError:
         return aiohttp.web.Response(status=500)
-    except KeyError as e:
+    except APIError as e:
         return aiohttp.web.Response(status=500, text=json.dumps({
             'errors': [{
                 'status': 500,
@@ -43,11 +40,12 @@ async def efficiency(request):
             }]}))
     except Exception as e:
         logger.exception(e)
-        sentry.captureException()
+        SENTRY.captureException()
         return aiohttp.web.Response(status=500, text=json.dumps({
             'errors': [{
                 'status': 500,
-                'title': str(e),
+                'title': 'internal error occured',
+                'detail': str(e),
             }]}))
 
 
