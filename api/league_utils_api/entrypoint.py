@@ -35,6 +35,12 @@ async def efficiency(request):
             }]}))
     except asyncio.CancelledError:
         return aiohttp.web.Response(status=500)
+    except KeyError as e:
+        return aiohttp.web.Response(status=500, text=json.dumps({
+            'errors': [{
+                'status': 500,
+                'title': str(e),
+            }]}))
     except Exception as e:
         logger.exception(e)
         sentry.captureException()
