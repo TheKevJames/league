@@ -24,7 +24,7 @@ async def efficiency(request):
                 'attributes': {
                     'cost': str(await item.cost),
                     'efficiency': str(await item.efficiency),
-                    'worth': str(await item.worth),
+                    'worth': str(round(await item.worth, 3)),
 
                     'ignored_stats': (await item.ignored_stats),
                     'included_stats': (await item.included_stats),
