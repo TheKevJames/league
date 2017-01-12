@@ -47,23 +47,49 @@ IW1 = {
     'PercentMPRegenMod': 125 / 0.25,  # faerie charm
 }
 IW2 = {
-    'FlatMovementSpeedOutOfCombatMod': (900 - IW1['FlatMovementSpeedMod'] * 25) / (115 - 25),  # mobis - MS
-    'FlatOnHitMod': (1000 - IW1['PercentAttackSpeedMod'] * 0.25) / 15,  # recurve bow - AS
-    'PercentArmorPenetrationMod': (1300 - IW1['FlatPhysicalDamageMod'] * 25) / 0.3,  # last whisper - AD
-    'PercentCooldownMod': (800 - IW1['FlatHPPoolMod'] * 200) / 0.10,  # kindlegem - HP
-    'PercentLifeStealMod': (900 - IW1['FlatPhysicalDamageMod'] * 15) / 0.10,  # vampiric sceptre - AD
-    'PercentMagicPenetrationMod': (1100 - IW1['FlatMovementSpeedMod'] * 45) / 0.15,  # sorcerer's shoes - MS
-    'PercentMovementSpeedMod': (850 - IW1['FlatMagicDamageMod'] * 30) / 0.05,  # aether wisp - AP
+    'FlatMovementSpeedOutOfCombatMod':
+        # mobis - MS
+        (900 - IW1['FlatMovementSpeedMod'] * 25) / (115 - 25),
+    'FlatOnHitMod':
+        # recurve bow - AS
+        (1000 - IW1['PercentAttackSpeedMod'] * 0.25) / 15,
+    'PercentArmorPenetrationMod':
+        # last whisper - AD
+        (1300 - IW1['FlatPhysicalDamageMod'] * 25) / 0.3,
+    'PercentCooldownMod':
+        # kindlegem - HP
+        (800 - IW1['FlatHPPoolMod'] * 200) / 0.10,
+    'PercentLifeStealMod':
+        # vampiric sceptre - AD
+        (900 - IW1['FlatPhysicalDamageMod'] * 15) / 0.10,
+    'PercentMagicPenetrationMod':
+        # sorcerer's shoes - MS
+        (1100 - IW1['FlatMovementSpeedMod'] * 45) / 0.15,
+    'PercentMovementSpeedMod':
+        # aether wisp - AP
+        (850 - IW1['FlatMagicDamageMod'] * 30) / 0.05,
 }
 IW2F = {
-    'FlatHPRegenMod': (450 - IW1['FlatHPPoolMod'] * 80) / 1.2,  # doran's shield - HP
-    'FlatLifeOnHitMod': (450 - IW1['FlatPhysicalDamageMod'] * 7) / 3,  # cull - AD
-    'PercentHPPoolMod': (2625 - IW1['FlatHPPoolMod'] * 400) / 0.15,  # cinderhulk - HP
+    'FlatHPRegenMod':
+        (450 - IW1['FlatHPPoolMod'] * 80) / 1.2,  # doran's shield - HP
+    'FlatLifeOnHitMod':
+        (450 - IW1['FlatPhysicalDamageMod'] * 7) / 3,  # cull - AD
+    'PercentHPPoolMod':
+        (2625 - IW1['FlatHPPoolMod'] * 400) / 0.15,  # cinderhulk - HP
 }
 IW3 = {
-    'FlatLethalityMod': (1100 - IW1['FlatPhysicalDamageMod'] * 25 - IW2['FlatMovementSpeedOutOfCombatMod'] * 20) / 10,  # serrated dirk - AD - MSOOC
-    'FlatMagicPenetrationMod': (1500 - IW1['FlatMagicDamageMod'] * 25 - IW1['FlatHPPoolMod'] * 200) / 15,  # haunting guise - AP - HP
-    'PercentHealAndShieldMod': (800 - IW1['PercentMPRegenMod'] * 0.5 - IW2['PercentCooldownMod'] * 0.1) / 0.08,  # forbidden idol - MPR% - CDR
+    'FlatLethalityMod':
+        # serrated dirk - AD - MSOOC
+        (1100 - IW1['FlatPhysicalDamageMod'] * 25
+         - IW2['FlatMovementSpeedOutOfCombatMod'] * 20) / 10,
+    'FlatMagicPenetrationMod':
+        # haunting guise - AP - HP
+        (1500 - IW1['FlatMagicDamageMod'] * 25
+         - IW1['FlatHPPoolMod'] * 200) / 15,
+    'PercentHealAndShieldMod':
+        # forbidden idol - MPR% - CDR
+        (800 - IW1['PercentMPRegenMod'] * 0.5
+         - IW2['PercentCooldownMod'] * 0.1) / 0.08,
 }
 IWARB = {
     'FlatMPRegenMod': 10,  # guardian's orb - HP - AP (too good!)
@@ -72,8 +98,10 @@ IWARB = {
     'PercentIncreasedPotionMod': 5 * 50,  # 5 potions, 50gp each
     'PercentLifeStealJungleMod': 0.75 * IW2['PercentLifeStealMod'],
     'PercentMPRegenJungleMod': 0.75 * IW1['PercentMPRegenMod'],
-    'ScalingFlatMagicDamageMod': IW1['FlatMagicDamageMod'] / 8,  # from flat, lvl 8 x-over
-    'ScalingFlatMPPoolMod': IW1['FlatMPPoolMod'] / 8,  # from flat, lvl 8 x-over
+    'ScalingFlatMagicDamageMod':
+        IW1['FlatMagicDamageMod'] / 8,  # from flat, lvl 8 x-over
+    'ScalingFlatMPPoolMod':
+        IW1['FlatMPPoolMod'] / 8,  # from flat, lvl 8 x-over
 }
 IWMISSING = {
     'FlatGoldPer10Mod': 0,
