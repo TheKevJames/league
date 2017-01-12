@@ -227,31 +227,31 @@ class Item(object):
 
     @property
     def cost(self):
-        if not self._cost:
+        if isinstance(self._cost, type(None)):
             self._load_riot()
         return self._cost
 
     @property
     def effects(self):
-        if not self._effects:
+        if isinstance(self._effects, type(None)):
             self._load_riot()
         return self._effects
 
     @property
     def maps(self):
-        if not self._maps:
+        if isinstance(self._maps, type(None)):
             self._load_riot()
         return self._maps
 
     @property
     def name(self):
-        if not self._name:
+        if isinstance(self._name, type(None)):
             self._load_riot()
         return self._name
 
     @property
     def stats(self):
-        if not self._stats:
+        if isinstance(self._stats, type(None)):
             self._load_riot()
         return self._stats
 

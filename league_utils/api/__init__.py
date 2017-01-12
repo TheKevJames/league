@@ -45,4 +45,4 @@ def get_item(item_filter=None):
     if item_filter:
         raise Exception('Could not find item {}', item_filter)
 
-    return items
+    return sorted(items, key=lambda x: x['id'])
