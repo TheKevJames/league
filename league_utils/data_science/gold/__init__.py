@@ -21,8 +21,8 @@ def maximum_minion_kill(lane, time_current, kill_interval=0, kill_rate=1,
 
         minion = None
         for minion in (siege, melee, caster):
-            available = minion.in_lane(lane, time) - \
-                        minion.in_lane(lane, time - 1)
+            available = (
+                minion.in_lane(lane, time) - minion.in_lane(lane, time - 1))
             if available:
                 break
         else:

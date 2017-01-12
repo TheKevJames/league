@@ -25,16 +25,16 @@ class Minion(object):
     def first_spawn(self):
         return {
             'caster': 90,
-            'melee':  75,
-            'siege':  135,
+            'melee': 75,
+            'siege': 135,
         }[self.name]
 
     @property
     def group_size(self):
         return {
             'caster': 3,
-            'melee':  3,
-            'siege':  1,
+            'melee': 3,
+            'siege': 1,
         }[self.name]
 
     def in_lane(self, lane, time):
@@ -43,8 +43,8 @@ class Minion(object):
     def interval(self, time=0):
         return {
             'caster': 30,
-            'melee':  30,
-            'siege':  30 if time > MIN35 else 60 if time > MIN20 else 90,
+            'melee': 30,
+            'siege': 30 if time > MIN35 else 60 if time > MIN20 else 90,
         }[self.name]
 
     def intervals(self, time_current, time_first_spawn):
@@ -77,6 +77,6 @@ class Minion(object):
     def value(self, time):
         return {
             'caster': 17.5 + (0.125 * (time // 90)),
-            'melee':  20.5 + (0.125 * (time // 90)),
-            'siege':  45.5 + (0.350 * (time // 90)),
+            'melee': 20.5 + (0.125 * (time // 90)),
+            'siege': 45.5 + (0.350 * (time // 90)),
         }[self.name]
