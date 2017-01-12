@@ -19,7 +19,7 @@ async def efficiency(request):
         iid = int(request.match_info['id'])
         item = await Item.from_id(iid)
 
-        return aiohttp.web.Response(status=200, text=json.dumps({
+        return aiohttp.web.json_response(status=200, data={
             'data': [{
                 'type': 'item',
                 'id': iid,
@@ -31,24 +31,24 @@ async def efficiency(request):
                     'ignored_stats': (await item.ignored_stats),
                     'included_stats': (await item.included_stats),
                 }
-            }]}))
+            }]})
     except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
         return aiohttp.web.Response(status=500)
     except APIError as e:
-        return aiohttp.web.Response(status=e.status, text=json.dumps({
+        return aiohttp.web.json_response(status=e.status, data={
             'errors': [{
                 'status': e.status,
                 'title': str(e),
-            }]}))
+            }]})
     except Exception as e:
         logger.exception(e)
         SENTRY.captureException()
-        return aiohttp.web.Response(status=500, text=json.dumps({
+        return aiohttp.web.json_response(status=500, data={
             'errors': [{
                 'status': 500,
                 'title': 'internal error occured',
                 'detail': str(e),
-            }]}))
+            }]})
 
 
 async def ping(_request):
