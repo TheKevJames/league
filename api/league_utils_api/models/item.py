@@ -201,11 +201,11 @@ class Item:
                 dvalue1, dkey = dkey.split(' ', 1)
                 try:
                     if dvalue1[-1] == '%':
-                        fvalue1 = float(dvalue1[:-1])
+                        float(dvalue1[:-1])
                     else:
-                        fvalue1 = float(dvalue1)
+                        float(dvalue1)
                     dvalue += dvalue1
-                except:
+                except ValueError:
                     # ...and sometimes used as a dash.
                     return
 
