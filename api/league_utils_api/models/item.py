@@ -1,6 +1,9 @@
+import asyncio
 import logging
 import re
 import uuid
+
+import aiohttp
 
 from ..error import APIError
 from ..monitor import SENTRY
@@ -100,9 +103,13 @@ class Item:
 
         try:
             data = await get_item(self.iid)
+        except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
+            raise
+        except AssertionError as e:
+            raise APIError(404, 'item {} does not exist'.format(self.iid))
         except Exception as e:
             logger.exception(e)
-            raise APIError('Could not look up item "{}"'.format(self.iid))
+            raise APIError(500, 'error looking up item {}'.format(self.iid))
 
         self._cost = int(data.get('gold', {}).get('total', 0))
         self._description = data.get('description', "Missing description.")

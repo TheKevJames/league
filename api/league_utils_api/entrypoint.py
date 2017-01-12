@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 
+import aiohttp
 import aiohttp.web
 
 from .error import APIError
@@ -31,12 +32,12 @@ async def efficiency(request):
                     'included_stats': (await item.included_stats),
                 }
             }]}))
-    except asyncio.CancelledError:
+    except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
         return aiohttp.web.Response(status=500)
     except APIError as e:
-        return aiohttp.web.Response(status=500, text=json.dumps({
+        return aiohttp.web.Response(status=e.status, text=json.dumps({
             'errors': [{
-                'status': 500,
+                'status': e.status,
                 'title': str(e),
             }]}))
     except Exception as e:
