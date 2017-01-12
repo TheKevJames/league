@@ -1,18 +1,14 @@
-import asyncio
 import logging
 import re
 import uuid
 
-import aiohttp
-
 from ..error import APIError
 from ..monitor import SENTRY
 from ..riot.constants import (
-    API_ITEM,
-    API_ITEMS,
     ITEM_DESCRIPTION_STAT_KEYS,
     ITEM_WORTH,
 )
+from ..riot.api import get_item
 
 
 HTML_TAG = re.compile('<[^<]+?>')
@@ -24,10 +20,8 @@ logger = logging.getLogger()
 
 
 class Item:
-    @classmethod
-    async def from_id(cls, iid):
-        self = Item()
-        self.iid = iid
+    def __init__(self):
+        self.iid = None
 
         self._cost = 0
         self._description = ''
@@ -40,6 +34,11 @@ class Item:
         self._worth = None
 
         self._loaded = False
+
+    @classmethod
+    async def from_id(cls, iid):
+        self = Item()
+        self.iid = iid
         return self
 
     @property
@@ -100,10 +99,7 @@ class Item:
             return
 
         try:
-            url = API_ITEM.format(self.iid)
-            async with aiohttp.ClientSession() as c, c.get(url) as response:
-                assert response.status == 200
-                data = await response.json()
+            data = await get_item(self.iid)
         except Exception as e:
             logger.exception(e)
             raise APIError('Could not look up item "{}"'.format(self.iid))
@@ -303,9 +299,9 @@ class Item:
             await from_aura(title, description)
 
         if '<consumable>' in d:
-           idx = d.find('</consumable>')
-           consumable = d[idx + 14:d.find('<br>', idx)]
-           await from_consumable(consumable)
+            idx = d.find('</consumable>')
+            consumable = d[idx + 14:d.find('<br>', idx)]
+            await from_consumable(consumable)
 
         if '<stats>' in d:
             stats = d[d.find('<stats>') + 7:d.find('</stats>')]

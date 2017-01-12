@@ -7,6 +7,7 @@ import aiohttp.web
 from .error import APIError
 from .models import Item
 from .monitor import SENTRY
+from .riot.api import clear_cache
 
 
 logger = logging.getLogger('test')
@@ -55,6 +56,8 @@ async def ping(_request):
 
 def run():
     loop = asyncio.get_event_loop()
+
+    asyncio.ensure_future(clear_cache())
 
     app = aiohttp.web.Application()
 
