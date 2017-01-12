@@ -12,6 +12,7 @@ setuptools.setup(
     url='https://github.com/TheKevJames/league.git',
     license='MIT License',
     packages=setuptools.find_packages(),
+    install_requires=['aiohttp'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
