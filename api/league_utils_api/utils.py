@@ -2,7 +2,7 @@ import collections
 import functools
 
 
-def async_lru_cache(maxsize=100):
+def async_lru_cache(maxsize=128):
     cache = collections.OrderedDict()
 
     def cache_clear():
