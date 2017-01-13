@@ -5,8 +5,8 @@ import aiohttp
 
 from ...error import APIError
 from ...riot.api import get_item
-from ...riot.constants import ITEM_WORTH
 from .stats import build_stats
+from .worth import calculate_worth, split_stats
 
 
 logger = logging.getLogger()
@@ -78,13 +78,11 @@ class Item:
     async def worth(self):
         await self.load_data()
         if self._worth is None:
-            self._worth = sum(ITEM_WORTH[k] * v
-                              for k, v in self._stats.items())
-            for stat, value in self._stats.items():
-                if ITEM_WORTH[stat] == 0:
-                    self._ignored_stats[stat] = value
-                else:
-                    self._included_stats[stat] = value
+            self._worth = calculate_worth(self._stats)
+
+            ignored, included = split_stats(self._stats)
+            self._ignored_stats.update(ignored)
+            self._included_stats.update(included)
         return self._worth
 
     async def load_data(self):
