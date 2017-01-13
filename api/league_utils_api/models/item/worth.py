@@ -87,7 +87,6 @@ ITEM_WORTH = {
 }
 
 
-
 def calculate_worth(stats):
     return sum(ITEM_WORTH[k] * v for k, v in stats.items())
 
