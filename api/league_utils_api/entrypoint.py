@@ -5,9 +5,10 @@ import aiohttp
 import aiohttp.web
 
 from .error import APIError
-from .models import Item
+from .models import Item, Itemset
 from .monitor import SENTRY
-from .api.riot import clear_cache
+from .api.championgg import clear_cache as clear_championgg_cache
+from .api.riot import clear_cache as clear_riot_cache
 
 
 logger = logging.getLogger('test')
@@ -50,6 +51,32 @@ async def efficiency(request):
             }]})
 
 
+async def itemset(request):
+    try:
+        cid = int(request.match_info['id'])
+        role = str(request.match_info['role'])
+        iset = await Itemset.from_cid_and_role(cid, role)
+
+        return aiohttp.web.json_response(status=200, data=await iset.rendered)
+    except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
+        return aiohttp.web.Response(status=500)
+    except APIError as e:
+        return aiohttp.web.json_response(status=e.status, data={
+            'errors': [{
+                'status': e.status,
+                'title': str(e),
+            }]})
+    except Exception as e:
+        logger.exception(e)
+        SENTRY.captureException()
+        return aiohttp.web.json_response(status=500, data={
+            'errors': [{
+                'status': 500,
+                'title': 'internal error occured',
+                'detail': str(e),
+            }]})
+
+
 async def ping(_request):
     return aiohttp.web.Response(text='ok')
 
@@ -57,12 +84,14 @@ async def ping(_request):
 def run():
     loop = asyncio.get_event_loop()
 
-    asyncio.ensure_future(clear_cache())
+    asyncio.ensure_future(clear_championgg_cache())
+    asyncio.ensure_future(clear_riot_cache())
 
     app = aiohttp.web.Application()
 
     app.router.add_route('GET', '/ping', ping)
     app.router.add_route('GET', r'/item/{id:\d+}/efficiency', efficiency)
+    app.router.add_route('GET', r'/champ/{id:\d+}/itemset/{role:\w+}', itemset)
 
     handler = app.make_handler(access_log=None)
     server = loop.create_server(handler, '0.0.0.0', 8080)
