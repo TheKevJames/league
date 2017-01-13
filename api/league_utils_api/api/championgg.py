@@ -60,6 +60,4 @@ async def reset_cache():
         get_itemstarts_best.cache_clear()
         get_itemstarts_popular.cache_clear()
 
-        # TODO: re-populate?
-
         await asyncio.sleep(60 * 60 * 24)

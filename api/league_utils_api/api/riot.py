@@ -47,6 +47,10 @@ async def reset_cache():
         get_item.cache_clear()
         get_items.cache_clear()
 
-        # TODO: re-populate?
+        # TODO: py36
+        items = await get_items()
+        for iid in items['data']:
+            asyncio.ensure_future(get_item(iid))
+        # END TODO
 
         await asyncio.sleep(60 * 60 * 24)
