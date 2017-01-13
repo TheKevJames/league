@@ -3,7 +3,7 @@ import setuptools
 
 
 setuptools.setup(
-    name='league-utils-api',
+    name='league-utils',
     version='1.0.0',
     description='League of Legends utilities (API Server)',
     keywords='league of legends game utilities item set generator isg',
@@ -23,7 +23,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'league-utils-api = league_utils_api.entrypoint:run',
+            'league-utils-api = league_utils.entrypoint:api',
         ],
     },
 )

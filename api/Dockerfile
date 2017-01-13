@@ -6,7 +6,7 @@ RUN pip install --upgrade pip && \
 
 COPY setup.py /src/setup.py
 COPY setup.cfg /src/setup.cfg
-COPY league_utils_api /src/league_utils_api
+COPY league_utils /src/league_utils
 RUN pip install /src
 
 CMD league-utils-api
