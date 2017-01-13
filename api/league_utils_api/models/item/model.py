@@ -6,6 +6,7 @@ import aiohttp
 from ...api.riot import get_item
 from ...error import APIError
 from .stats import build_stats
+from .tags import build_tags
 from .worth import calculate_worth, split_stats
 
 
@@ -102,9 +103,8 @@ class Item:
         self._cost = int(data.get('gold', {}).get('total', 0))
         self._description = data.get('description', "Missing description.")
         self._name = data.get('name', 'missing-name')
-        # TODO: fixup tags
-        self._tags = set(data.get('tags', set())) - {'Bilgewater'}
 
+        self._tags = await build_tags(data)
         self._stats, self._ignored_stats = await build_stats(self._description)
 
         self._loaded = True
