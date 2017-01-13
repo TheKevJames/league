@@ -7,6 +7,7 @@ from ...api.championgg import get_itemsets_best, get_itemsets_popular
 from ...api.riot import get_champ
 from ...error import APIError
 from ...models import Item
+from .build import build_itemset
 
 
 logger = logging.getLogger()
@@ -17,9 +18,11 @@ class Itemset:
         self.cid = None
         self.role = None
 
-        self.ckey = None
+        self._ckey = None
+        self._builds = {'best': {}, 'popular': {}}
+        self._starts = {'best': {}, 'popular': {}}
 
-        self.blocks = []
+        self._blocks = []
 
         self._loaded = False
 
@@ -33,6 +36,11 @@ class Itemset:
     @property
     async def rendered(self):
         await self.load_data()
+        if not self._blocks:
+            err = 'could not create itemset for champ {} in role {}'.format(
+                self.cid, self.role)
+            raise APIError(404, err)
+
         return {
             'title': '{} (auto-generated)'.format(self.role),
             'map': 'SR',
@@ -46,12 +54,12 @@ class Itemset:
             'associatedChampions': list(),
             'associatedMaps': [],
             'isGlobalForMaps': True,
-            'champion': self.ckey,
+            'champion': self._ckey,
 
             'blocks': [{
                 'type': name,
                 'items': [{'count': 1, 'id': str(item.iid)} for item in items],
-            } for name, items in self.blocks],
+            } for name, items in self._blocks],
         }
 
     async def load_data(self):
@@ -59,9 +67,13 @@ class Itemset:
             return
 
         try:
-            self.ckey = (await get_champ(self.cid))['key']
-            best = await get_itemsets_best(self.ckey)
-            popular = await get_itemsets_popular(self.ckey)
+            self._ckey = (await get_champ(self.cid))['key']
+
+            best = await get_itemsets_best(self._ckey)
+            popular = await get_itemsets_popular(self._ckey)
+
+            starts_best = await get_itemsets_best(self._ckey)
+            starts_popular = await get_itemsets_popular(self._ckey)
         except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
             raise
         except AssertionError as e:
@@ -70,28 +82,41 @@ class Itemset:
             logger.exception(e)
             raise APIError(500, 'error looking up champ {}'.format(self.cid))
 
-        # TODO: use items from other roles as info
         for iset in best:
-            if iset['role'].lower() != self.role:
+            items = [Item(i) for i in iset['items']]
+
+            role = iset['role'].lower()
+            self._builds['best'][role] = items
+
+            if role != self.role:
                 continue
 
             title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
-            # TODO: python 3.6
-            # items = [await Item.from_id(i) for i in iset['items']]
-            items = [Item() for _ in iset['items']]
-            for item, data in zip(items, iset['items']):
-                item.iid = data
-            self.blocks.append((title, items))
+            self._blocks.append((title, items))
+
         for iset in popular:
-            if iset['role'].lower() != self.role:
+            items = [Item(i) for i in iset['items']]
+
+            role = iset['role'].lower()
+            self._builds['popular'][role] = items
+
+            if role != self.role:
                 continue
 
             title = 'champion.gg Most Popular ({}%)'.format(iset['winPercent'])
-            # TODO: python 3.6
-            # items = [await Item.from_id(i) for i in iset['items']]
-            items = [Item() for _ in iset['items']]
-            for item, data in zip(items, iset['items']):
-                item.iid = data
-            self.blocks.append((title, items))
+            self._blocks.append((title, items))
+
+        for iset in starts_best:
+            items = [Item(i) for i in iset['items']]
+            self._starts['best'][iset['role'].lower()] = items
+
+        for iset in starts_popular:
+            items = [Item(i) for i in iset['items']]
+            self._starts['popular'][iset['role'].lower()] = items
+
+        if self._blocks:
+            # Implies API had data for this champ & role
+            iset = await build_itemset(self._starts, self._builds, self.role)
+            self._blocks = iset + self._blocks
 
         self._loaded = True

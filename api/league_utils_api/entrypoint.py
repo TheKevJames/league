@@ -7,8 +7,8 @@ import aiohttp.web
 from .error import APIError
 from .models import Item, Itemset
 from .monitor import SENTRY
-from .api.championgg import clear_cache as clear_championgg_cache
-from .api.riot import clear_cache as clear_riot_cache
+from .api.championgg import reset_cache as reset_championgg_cache
+from .api.riot import reset_cache as reset_riot_cache
 
 
 logger = logging.getLogger('test')
@@ -17,7 +17,7 @@ logger = logging.getLogger('test')
 async def efficiency(request):
     try:
         iid = int(request.match_info['id'])
-        item = await Item.from_id(iid)
+        item = Item(iid)
 
         return aiohttp.web.json_response(status=200, data={
             'data': [{
@@ -84,8 +84,8 @@ async def ping(_request):
 def run():
     loop = asyncio.get_event_loop()
 
-    asyncio.ensure_future(clear_championgg_cache())
-    asyncio.ensure_future(clear_riot_cache())
+    asyncio.ensure_future(reset_championgg_cache())
+    asyncio.ensure_future(reset_riot_cache())
 
     app = aiohttp.web.Application()
 

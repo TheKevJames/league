@@ -13,13 +13,14 @@ logger = logging.getLogger()
 
 
 class Item:
-    def __init__(self):
-        self.iid = None
+    def __init__(self, iid=None):
+        self.iid = iid
 
         self._cost = 0
         self._description = ''
         self._name = ''
         self._stats = {}
+        self._tags = set()
 
         self._efficiency = None
         self._ignored_stats = {}
@@ -27,12 +28,6 @@ class Item:
         self._worth = None
 
         self._loaded = False
-
-    @classmethod
-    async def from_id(cls, iid):
-        self = Item()
-        self.iid = iid
-        return self
 
     @property
     async def cost(self):
@@ -75,6 +70,11 @@ class Item:
         return self._stats
 
     @property
+    async def tags(self):
+        await self.load_data()
+        return self._tags
+
+    @property
     async def worth(self):
         await self.load_data()
         if self._worth is None:
@@ -102,6 +102,8 @@ class Item:
         self._cost = int(data.get('gold', {}).get('total', 0))
         self._description = data.get('description', "Missing description.")
         self._name = data.get('name', 'missing-name')
+        # TODO: fixup tags
+        self._tags = set(data.get('tags', set())) - {'Bilgewater'}
 
         self._stats, self._ignored_stats = await build_stats(self._description)
 

@@ -1,5 +1,6 @@
 import collections
 import functools
+import operator
 
 
 def async_lru_cache(maxsize=128):
@@ -28,3 +29,7 @@ def async_lru_cache(maxsize=128):
         return memoizer
 
     return decorator
+
+
+def without(lh, *rh):
+    return [x for x in lh if x not in set(functools.reduce(operator.add, rh))]
