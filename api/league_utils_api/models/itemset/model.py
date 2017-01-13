@@ -18,7 +18,7 @@ class Itemset:
         self.cid = None
         self.role = None
 
-        self._ckey = None
+        self._ckey = ''
         self._builds = {'best': {}, 'popular': {}}
         self._starts = {'best': {}, 'popular': {}}
 
@@ -116,7 +116,8 @@ class Itemset:
 
         if self._blocks:
             # Implies API had data for this champ & role
-            iset = await build_itemset(self._starts, self._builds, self.role)
+            iset = await build_itemset(self._ckey, self._starts, self._builds,
+                                       self.role)
             self._blocks = iset + self._blocks
 
         self._loaded = True

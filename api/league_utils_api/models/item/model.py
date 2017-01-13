@@ -20,6 +20,7 @@ class Item:
         self._cost = 0
         self._description = ''
         self._name = ''
+        self._required_champion = ''
         self._stats = {}
         self._tags = set()
 
@@ -66,6 +67,11 @@ class Item:
         return self._name
 
     @property
+    async def required_champion(self):
+        await self.load_data()
+        return self._required_champion
+
+    @property
     async def stats(self):
         await self.load_data()
         return self._stats
@@ -103,6 +109,7 @@ class Item:
         self._cost = int(data.get('gold', {}).get('total', 0))
         self._description = data.get('description', "Missing description.")
         self._name = data.get('name', 'missing-name')
+        self._required_champion = data.get('requiredChampion', '')
 
         self._tags = await build_tags(data)
         self._stats, self._ignored_stats = await build_stats(self._description)

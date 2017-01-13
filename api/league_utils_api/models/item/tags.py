@@ -36,7 +36,7 @@ def get_missing_tags(iid, name):
                 'Siege Warp (Inactive)', 'Tower: Beam of Ruination',
                 'Tower: Storm Bulwark', 'Tower Surge: Beam of Ruination',
                 'Tower Surge: Firestorm Bulwark', 'Vanguard Banner',
-                'Pop-Snax', 'unknown-item'):
+                'Diet Poro-Snax', 'Poro-Snax', 'unknown-item'):
         return {}
 
     logger.error('item %s has no tags', iid)

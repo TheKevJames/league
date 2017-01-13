@@ -61,10 +61,10 @@ async def reorder(items, wants):
                                             reverse=True) if rating > 0]
 
 
-async def build_itemset(starts, builds, role):
+async def build_itemset(champ, starts, builds, role):
     # TODO: py36 merge below lines
     item_ids = (await get_items())['data'].keys()
-    items = (Item(iid) for iid in item_ids)
+    items = [Item(iid) for iid in item_ids]
     wants = await build_wants(builds, role)
 
     early = starts['best'][role] + await reorder(boots(), wants)
@@ -72,9 +72,22 @@ async def build_itemset(starts, builds, role):
     options = without(await reorder(items, wants), build, early,
                       list(consumables()))[:10]
 
-    return [
+    isg = [
         ('Consumables', consumables()),
         ('Early & Boots', early),
         ('Build', build),
         ('Options', options),
     ]
+    # TODO: py26
+    # champ_items = [item for item in items
+    #                if await item.required_champion == champ]
+    champ_items = []
+    for item in items:
+        required_champion = await item.required_champion
+        if required_champion == champ:
+            champ_items.append(item)
+    # END TODO
+    if champ_items:
+        isg.append(('Champion Items', champ_items))
+
+    return isg
