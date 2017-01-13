@@ -3,13 +3,47 @@ import logging
 import re
 
 from ...monitor import SENTRY
-from ...riot.constants import ITEM_DESCRIPTION_STAT_KEYS
 
 
 HTML_TAG = re.compile('<[^<]+?>')
 ON_HIT = re.compile(
     r'basic attacks deal(?: an additional)? (.*?)(?: (?:as|in))?(?: bonus)?'
     r'(?: (?:magic|physical))? damage(?: .*?)?(?: (?:on hit|vs\. monsters)).*')
+
+ITEM_DESCRIPTION_STAT_KEYS = {
+    'Ability Power per level': 'Scaling{}MagicDamageMod',
+    'Ability Power': '{}MagicDamageMod',
+    'Armor': '{}ArmorMod',
+    'Attack Damage': '{}PhysicalDamageMod',
+    'Attack Speed': '{}AttackSpeedMod',
+    'Base Attack Damage': '{}PhysicalDamageMod',
+    'Base Health Regen': '{}HPRegenMod',
+    'Base Health Regeneration': '{}HPRegenMod',
+    'Base Mana Regen while in Jungle': '{}MPRegenJungleMod',
+    'Base Mana Regen': '{}MPRegenMod',
+    'Bonus Health': '{}HPPoolMod',
+    'Heal and Shield Power': '{}HealAndShieldMod',
+    'increased cooldown': '{}CooldownMod',  # I would have assumed this should
+                                            # be negative... but no. See i#3363
+    'Cooldown Reduction': '{}CooldownMod',
+    'Critical Strike Chance': '{}CritChanceMod',
+    'Damage taken from Critical Strikes': '{}DamageReductionCritMod',
+    'Gold per 10 seconds': '{}GoldPer10Mod',
+    'Health': '{}HPPoolMod',
+    'Increased Healing from Potions': '{}IncreasedPotionMod',
+    'Lethality': '{}LethalityMod',
+    'Life on Hit': '{}LifeOnHitMod',
+    'Life Steal vs. Monsters': '{}LifeStealJungleMod',
+    'Life Steal': '{}LifeStealMod',
+    'Magic Penetration': '{}MagicPenetrationMod',
+    'Magic Resist': '{}SpellBlockMod',
+    'Mana per level': 'Scaling{}MPPoolMod',
+    'Mana regen per 5 seconds': '{}MPRegenPer5Mod',
+    'Mana': '{}MPPoolMod',
+    'Movement Speed': '{}MovementSpeedMod',
+    'Movement Speed out of Combat': '{}MovementSpeedOutOfCombatMod',
+    'Bonus Armor Penetration': '{}ArmorPenetrationMod',
+}
 
 logger = logging.getLogger()
 
