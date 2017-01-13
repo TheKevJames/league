@@ -4,7 +4,7 @@ import logging
 import aiohttp
 
 from ...error import APIError
-from ...riot.api import get_item
+from ...api.riot import get_item
 from .stats import build_stats
 from .worth import calculate_worth, split_stats
 

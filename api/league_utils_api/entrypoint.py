@@ -1,5 +1,4 @@
 import asyncio
-import json
 import logging
 
 import aiohttp
@@ -8,7 +7,7 @@ import aiohttp.web
 from .error import APIError
 from .models import Item
 from .monitor import SENTRY
-from .riot.api import clear_cache
+from .api.riot import clear_cache
 
 
 logger = logging.getLogger('test')
