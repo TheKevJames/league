@@ -5,7 +5,7 @@ import aiohttp.web
 
 from .api.championgg import reset_cache as reset_championgg_cache
 from .api.riot import reset_cache as reset_riot_cache
-from .server import efficiency, itemset, ping
+from .server import champs, efficiency, itemset, ping
 
 
 def api():
@@ -18,6 +18,7 @@ def api():
 
     app.router.add_route('GET', '/ping', ping)
     app.router.add_route('GET', r'/item/{id:\d+}/efficiency', efficiency)
+    app.router.add_route('GET', r'/champ', champs)
     app.router.add_route('GET', r'/champ/{id:\d+}/itemset/{role:\w+}', itemset)
 
     handler = app.make_handler(access_log=None)
