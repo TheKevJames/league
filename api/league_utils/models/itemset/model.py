@@ -4,6 +4,7 @@ import logging
 import aiohttp
 
 from ...api.championgg import get_itemsets_best, get_itemsets_popular
+from ...api.championgg import get_itemstarts_best, get_itemstarts_popular
 from ...api.riot import get_champ
 from ...error import APIError
 from ...models import Item
@@ -72,8 +73,8 @@ class Itemset:
             best = await get_itemsets_best(self._ckey)
             popular = await get_itemsets_popular(self._ckey)
 
-            starts_best = await get_itemsets_best(self._ckey)
-            starts_popular = await get_itemsets_popular(self._ckey)
+            starts_best = await get_itemstarts_best(self._ckey)
+            starts_popular = await get_itemstarts_popular(self._ckey)
         except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
             raise
         except AssertionError as e:
