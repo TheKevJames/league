@@ -92,6 +92,7 @@ class Itemset:
             if role != self.role or not items:
                 continue
 
+            # TODO: hide/show?
             title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
             self._blocks.append((title, items))
 
@@ -104,6 +105,7 @@ class Itemset:
             if role != self.role or not items:
                 continue
 
+            # TODO: hide/show?
             title = 'champion.gg Most Popular ({}%)'.format(iset['winPercent'])
             self._blocks.append((title, items))
 

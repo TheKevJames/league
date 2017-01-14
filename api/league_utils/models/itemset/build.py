@@ -67,13 +67,13 @@ async def build_itemset(champ, starts, builds, role):
     items = [Item(iid) for iid in item_ids]
     wants = await build_wants(builds, role)
 
+    consume = list(consumables())
     early = starts['best'][role] + await reorder(boots(), wants)
-    build = without(builds['best'][role], early, list(consumables()))
-    options = without(await reorder(items, wants), build, early,
-                      list(consumables()))[:10]
+    build = without(builds['best'][role], early, consume)
+    options = without(await reorder(items, wants), build, early, consume)[:10]
 
     isg = [
-        ('Consumables', consumables()),
+        ('Consumables', consume),
         ('Early & Boots', early),
         ('Build', build),
         ('Options', options),
