@@ -17,7 +17,7 @@ CONSUMABLES = [
     (2031, 'Refillable Potion'),
     (2032, "Hunter's Potion"),
     (2033, 'Corrupting Potion'),
-    (2043, 'Vision Ward'),
+    # (2043, 'Vision Ward'),  # removed in S6
     (2047, "Oracle's Extract"),
     # (2050, "Explorer's Ward"),  # removed in S4
     (3340, 'Warding Trinket'),
