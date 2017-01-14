@@ -12,7 +12,7 @@ setuptools.setup(
     url='https://github.com/TheKevJames/league.git',
     license='MIT License',
     packages=setuptools.find_packages(),
-    install_requires=['aiohttp'],
+    install_requires=['aiohttp', 'docopt', 'tqdm'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
@@ -24,6 +24,7 @@ setuptools.setup(
     entry_points={
         'console_scripts': [
             'league-utils-api = league_utils.entrypoint:api',
+            'league-utils-isg = league_utils.entrypoint:isg',
         ],
     },
 )
