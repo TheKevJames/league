@@ -21,8 +21,7 @@ def consumables(extra=False):
     consumes = CONSUMABLES
     if extra:
         consumes += CONSUMABLES_EXTRA
-    # return (Item(i) for i, _ in consumes)
-    return [Item(i) for i, _ in consumes]
+    return (Item(i) for i, _ in consumes)
 
 
 def weight_wants(kind, is_role):
@@ -74,13 +73,13 @@ async def build_itemset(champ, starts, builds, role):
 
     early = starts['best'][role] + await reorder(boots(), wants)
     build = without(builds['best'][role], early, consumes)
-    options = without(await reorder(items, wants), build, early, consumes)[:10]
+    options = without(await reorder(items, wants), build, early, consumes)
 
     isg = [
         ('Consumables', consumables()),
-        ('Early & Boots', early),
+        ('Early & Boots', early[:10]),
         ('Build', build),
-        ('Options', options),
+        ('Options', options[:10]),
     ]
     # TODO: py26
     # champ_items = [item for item in items
