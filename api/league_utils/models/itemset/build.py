@@ -5,7 +5,7 @@ import operator
 from ...api.riot import get_items
 from ...models import Item
 from ...utils import without
-from .constants import BOOTS, CONSUMABLES
+from .constants import BOOTS, CONSUMABLES, CONSUMABLES_EXTRA
 
 
 UNWANTED_TAGS = {'Active', 'Boots', 'Consumable', 'Jungle', 'Lane', 'Trinket'}
@@ -17,8 +17,12 @@ def boots():
     return (Item(i) for i, _ in BOOTS)
 
 
-def consumables():
-    return (Item(i) for i, _ in CONSUMABLES)
+def consumables(extra=False):
+    consumes = CONSUMABLES
+    if extra:
+        consumes += CONSUMABLES_EXTRA
+    # return (Item(i) for i, _ in consumes)
+    return [Item(i) for i, _ in consumes]
 
 
 def weight_wants(kind, is_role):
@@ -66,14 +70,14 @@ async def build_itemset(champ, starts, builds, role):
     item_ids = (await get_items())['data'].keys()
     items = [Item(iid) for iid in item_ids]
     wants = await build_wants(builds, role)
+    consumes = list(consumables(extra=True))
 
-    consume = list(consumables())
     early = starts['best'][role] + await reorder(boots(), wants)
-    build = without(builds['best'][role], early, consume)
-    options = without(await reorder(items, wants), build, early, consume)[:10]
+    build = without(builds['best'][role], early, consumes)
+    options = without(await reorder(items, wants), build, early, consumes)[:10]
 
     isg = [
-        ('Consumables', consume),
+        ('Consumables', consumables()),
         ('Early & Boots', early),
         ('Build', build),
         ('Options', options),
