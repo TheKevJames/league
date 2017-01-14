@@ -18,7 +18,7 @@ async def champs(_request):
 
         return aiohttp.web.json_response(status=200, data={
             'data': [{
-                'type': 'item',
+                'type': 'champ',
                 'id': blob['id'],
                 'attributes': {
                     'id': blob['id'],
