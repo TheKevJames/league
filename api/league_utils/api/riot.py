@@ -6,7 +6,7 @@ import aiohttp
 from ..utils import async_lru_cache
 
 
-TOKEN = os.environ['RIOT_TOKEN']
+TOKEN = os.environ.get('RIOT_TOKEN', '')
 
 API_STATIC_DATA = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2'
 API_CHAMP = API_STATIC_DATA + '/champion/{}?champData=all&api_key=' + TOKEN

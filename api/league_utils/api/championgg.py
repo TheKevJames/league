@@ -6,7 +6,7 @@ import aiohttp
 from ..utils import async_lru_cache
 
 
-TOKEN = os.environ['CHAMPIONGG_TOKEN']
+TOKEN = os.environ.get('CHAMPIONGG_TOKEN', '')
 
 API_BASE = 'http://api.champion.gg'
 API_ITEMS_DONE = API_BASE + '/champion/{}/items/finished'

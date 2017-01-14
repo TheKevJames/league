@@ -1,8 +1,12 @@
+import asyncio
+import itertools
+import json
 import os
 import platform
 import sys
 
 import aiohttp
+import tqdm
 
 from ..error import CLIError
 
@@ -16,7 +20,11 @@ async def get_itemset(cid, role):
         return await response.json()
 
 
-def save_itemset(ckey, role, itemset, output):
+async def save_itemset(cid, ckey, role, output):
+    itemset = await get_itemset(cid, role)
+    if not itemset:
+        return
+
     champion_dir = output.itemset_path(ckey)
     try:
         os.makedirs(champion_dir)
@@ -25,7 +33,17 @@ def save_itemset(ckey, role, itemset, output):
 
     itemset_filename = '{}_{}.json'.format(ckey, role)
     with open(os.path.join(champion_dir, itemset_filename), 'w') as f:
-        f.write(itemset)
+        f.write(json.dumps(itemset))
+
+
+async def save_itemsets(champs, roles, output):
+    tasks = []
+    for (cid, ckey), role in itertools.product(champs, roles):
+        task = asyncio.ensure_future(save_itemset(cid, ckey, role, output))
+        tasks.append(task)
+
+    for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
+        await task
 
 
 async def parse_champs(champ):
@@ -37,22 +55,22 @@ async def parse_champs(champ):
 
         data = (await response.json())['data']
 
-    if not champ:
-        return [(int(c['id']), c['attributes']['key']) for c in data]
-
     try:
         cid = [int(champ)]
-        ckey = [c['attributes']['key'] for c in data if c['id'] == champ]
+        ckey = [c['attributes']['key'] for c in data if c['id'] == cid[0]]
         return zip(cid, ckey)
     except TypeError:
-        pass
-
-    for c in data:
-        if c['attributes']['name'] == champ or c['attributes']['key'] == champ:
-            return [(int(c['id']), c['attributes']['key'])]
-
-    print('Could not find champion {}.'.format(champ))
-    sys.exit(1)
+        return [(int(c['id']), c['attributes']['key']) for c in data]
+    except ValueError:
+        champ = champ.lower()
+        for c in data:
+            ckey = c['attributes']['key']
+            name = c['attributes']['name']
+            if name.lower() == champ or ckey.lower() == champ:
+                return [(int(c['id']), ckey)]
+    except Exception:
+        print('Could not find champion {}.'.format(champ))
+        sys.exit(1)
 
 
 class Output:
