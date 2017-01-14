@@ -88,7 +88,7 @@ class Itemset:
             role = iset['role'].lower()
             self._builds['best'][role] = items
 
-            if role != self.role:
+            if role != self.role or not items:
                 continue
 
             title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
@@ -100,7 +100,7 @@ class Itemset:
             role = iset['role'].lower()
             self._builds['popular'][role] = items
 
-            if role != self.role:
+            if role != self.role or not items:
                 continue
 
             title = 'champion.gg Most Popular ({}%)'.format(iset['winPercent'])
