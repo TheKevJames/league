@@ -1,5 +1,4 @@
 import asyncio
-import itertools
 import sys
 
 import aiohttp
@@ -9,7 +8,7 @@ import tqdm
 
 from .api.championgg import reset_cache as reset_championgg_cache
 from .api.riot import reset_cache as reset_riot_cache
-from .cli import parse_champs, save_itemsets, Output
+from .cli import get_itemsets, parse_champs, save_itemset, Output
 from .server import champs, efficiency, itemset, ping
 
 
@@ -55,13 +54,25 @@ Options:
                       By default, this is:
                       "C:\\Program Files\\Riot Games\\League of Legends"
 """
+    # TODO: catch KeyboardInterrupt
     args = docopt.docopt(isg.__doc__, version='1.0.0', argv=sys.argv[1:])
 
     output = Output(args['--path'])
-    print('Writing item sets to {}'.format(output.path))
+    print('Using League install path: {}'.format(output.path))
 
     loop = asyncio.get_event_loop()
     champ = loop.run_until_complete(parse_champs(args['--champ']))
+    if not champ:
+        print('Could not find champion {}'.format(args['--champ']))
+        return
+
+    output.ensure_paths(champ)
     roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 
-    loop.run_until_complete(save_itemsets(champ, roles, output))
+    print('Downloading itemsets...')
+    tasks = get_itemsets(champ, roles)
+    itemsets = loop.run_until_complete(tasks)
+
+    print('Saving itemsets...')
+    for (ckey, role, iset) in tqdm.tqdm([x for x in itemsets if all(x)]):
+        save_itemset(ckey, role, iset, output)

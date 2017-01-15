@@ -11,39 +11,38 @@ import tqdm
 from ..error import CLIError
 
 
-async def get_itemset(cid, role):
+async def get_itemset(cid, ckey, role):
     url = 'https://league.thekev.in/champ/{}/itemset/{}'.format(cid, role)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         if response.status != 200:
-            return
+            return (None, None, None)
 
-        return await response.json()
+        return (ckey, role, await response.json())
 
 
-async def save_itemset(cid, ckey, role, output):
-    itemset = await get_itemset(cid, role)
+async def get_itemsets(champs, roles):
+    tasks = []
+    for (cid, ckey), role in itertools.product(champs, roles):
+        task = asyncio.ensure_future(get_itemset(cid, ckey, role))
+        tasks.append(task)
+
+    done = []
+    for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
+        done.append(await task)
+
+    return done
+
+
+def save_itemset(ckey, role, itemset, output):
     if not itemset:
         return
 
-    champion_dir = output.itemset_path(ckey)
-    try:
-        os.makedirs(champion_dir)
-    except OSError:
-        pass
-
-    itemset_filename = '{}_{}.json'.format(ckey, role)
-    with open(os.path.join(champion_dir, itemset_filename), 'w') as f:
+    itemset_file = os.path.join(
+        output.itemset_path(ckey),
+        '{}_{}.json'.format(ckey, role)
+    )
+    with open(itemset_file, 'w') as f:
         f.write(json.dumps(itemset))
-
-
-async def save_itemsets(champs, roles, output):
-    tasks = []
-    for (cid, ckey), role in itertools.product(champs, roles):
-        task = asyncio.ensure_future(save_itemset(cid, ckey, role, output))
-        tasks.append(task)
-
-    for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
-        await task
 
 
 async def parse_champs(champ):
@@ -109,3 +108,10 @@ class Output:
 
     def itemset_path(self, ckey):
         return os.path.join(self.champ_path, ckey, 'Recommended')
+
+    def ensure_paths(self, champs):
+        for _, ckey in champs:
+            try:
+                os.makedirs(self.itemset_path(ckey))
+            except FileExistsError:
+                pass
