@@ -15,7 +15,7 @@ async def get_itemset(cid, ckey, role):
     url = 'https://league.thekev.in/champ/{}/itemset/{}'.format(cid, role)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         if response.status != 200:
-            return (None, None, None)
+            return
 
         return (ckey, role, await response.json())
 
@@ -29,14 +29,12 @@ async def get_itemsets(champs, roles):
     done = []
     for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
         done.append(await task)
+        # TODO: success/failures?
 
     return done
 
 
 def save_itemset(ckey, role, itemset, output):
-    if not itemset:
-        return
-
     itemset_file = os.path.join(
         output.itemset_path(ckey),
         '{}_{}.json'.format(ckey, role)

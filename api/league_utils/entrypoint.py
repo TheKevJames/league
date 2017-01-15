@@ -70,9 +70,10 @@ Options:
     roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 
     print('Downloading itemsets...')
-    tasks = get_itemsets(champ, roles)
-    itemsets = loop.run_until_complete(tasks)
+    itemsets = loop.run_until_complete(get_itemsets(champ, roles))
+    itemsets = [x for x in itemsets if x]
+    print('Found {} itemsets'.format(len(itemsets)))
 
     print('Saving itemsets...')
-    for (ckey, role, iset) in tqdm.tqdm([x for x in itemsets if all(x)]):
+    for (ckey, role, iset) in tqdm.tqdm(itemsets):
         save_itemset(ckey, role, iset, output)
