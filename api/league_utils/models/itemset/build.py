@@ -18,10 +18,10 @@ def boots():
 
 
 def consumables(extra=False):
-    consumes = CONSUMABLES
     if extra:
-        consumes += CONSUMABLES_EXTRA
-    return (Item(i) for i, _ in consumes)
+        return (Item(i) for i, _ in CONSUMABLES + CONSUMABLES_EXTRA)
+
+    return (Item(i) for i, _ in CONSUMABLES)
 
 
 def weight_wants(kind, is_role):
