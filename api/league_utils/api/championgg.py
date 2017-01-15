@@ -38,7 +38,7 @@ async def get_itemsets_popular(ckey):
 @async_lru_cache(maxsize=256)
 async def get_itemstarts_best(ckey):
     assert TOKEN
-    url = API_ITEMS_DONE_BEST.format(ckey)
+    url = API_ITEMS_START_BEST.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
         return await response.json()
@@ -47,7 +47,7 @@ async def get_itemstarts_best(ckey):
 @async_lru_cache(maxsize=256)
 async def get_itemstarts_popular(ckey):
     assert TOKEN
-    url = API_ITEMS_DONE_POPULAR.format(ckey)
+    url = API_ITEMS_START_POPULAR.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
         return await response.json()
