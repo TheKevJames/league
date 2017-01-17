@@ -11,27 +11,36 @@ import tqdm
 from ..error import CLIError
 
 
-async def get_itemset(cid, ckey, role):
-    url = 'https://league.thekev.in/champ/{}/itemset/{}'.format(cid, role)
-    async with aiohttp.ClientSession() as client, client.get(url) as response:
-        if response.status != 200:
-            return
+# LEAGUE_UTILS_API = 'http://127.0.0.1:28006'
+LEAGUE_UTILS_API = 'https://league.thekev.in'
 
-        return (ckey, role, await response.json())
+
+async def get_itemset(session, cid, ckey, role):
+    url = '{}/champ/{}/itemset/{}'.format(LEAGUE_UTILS_API, cid, role)
+    try:
+        async with session.get(url, timeout=120) as response:
+            if response.status != 200:
+                return
+
+            return (ckey, role, await response.json())
+    except asyncio.TimeoutError:
+        print('TIMEOUT getting itemset for {} ({}).'.format(ckey, role))
+        return
 
 
 async def get_itemsets(champs, roles):
-    tasks = []
-    for (cid, ckey), role in itertools.product(champs, roles):
-        task = asyncio.ensure_future(get_itemset(cid, ckey, role))
-        tasks.append(task)
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for (cid, ckey), role in itertools.product(champs, roles):
+            task = asyncio.ensure_future(get_itemset(session, cid, ckey, role))
+            tasks.append(task)
 
-    done = []
-    for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
-        done.append(await task)
-        # TODO: success/failures?
+        done = []
+        for task in tqdm.tqdm(asyncio.as_completed(tasks), total=len(tasks)):
+            done.append(await task)
+            # TODO: success/failures?
 
-    return done
+        return done
 
 
 def save_itemset(ckey, role, itemset, output):
@@ -44,13 +53,20 @@ def save_itemset(ckey, role, itemset, output):
 
 
 async def parse_champs(champ):
-    url = 'https://league.thekev.in/champ'
-    async with aiohttp.ClientSession() as c, c.get(url) as response:
-        if response.status != 200:
-            print('ERROR reading from league-utils API.')
-            sys.exit(1)
+    url = '{}/champ'.format(LEAGUE_UTILS_API)
+    try:
+        async with aiohttp.ClientSession() as c, c.get(url) as response:
+            if response.status != 200:
+                print('ERROR reading from league-utils API.')
+                sys.exit(1)
 
-        data = (await response.json())['data']
+            data = (await response.json())['data']
+    except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
+        print('Cancelling...')
+        sys.exit(0)
+    except aiohttp.ClientError:
+        print('ERROR reading from league-utils API.')
+        sys.exit(1)
 
     try:
         cid = [int(champ)]
