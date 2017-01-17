@@ -37,13 +37,9 @@ async def build_wants(builds, role):
     wants = collections.Counter()
     for kind in ('best', 'popular'):
         for r, items in builds[kind].items():
-            # TODO: py36
-            # counted = collections.Counter(
-            #     [(await item.tags) - UNWANTED_TAGS for item in items])
             counted = collections.Counter()
             for item in items:
                 counted.update((await item.tags) - UNWANTED_TAGS)
-            # END TODO
 
             for _ in range(weight_wants(kind, r == role)):
                 wants += counted
@@ -52,22 +48,18 @@ async def build_wants(builds, role):
 
 
 async def reorder(items, wants):
-    # TODO: py36
-    # ratings = {item: sum(wants[t] for t in await item.tags)
-    #            for item in items}
     ratings = {}
     for item in items:
         ratings[item] = sum(wants[tag] for tag in await item.tags)
-    # END TODO
+
     return [item for item, rating in sorted(ratings.items(),
                                             key=operator.itemgetter(1),
-                                            reverse=True) if rating > 0]
+                                            reverse=True)
+            if rating > 0]
 
 
-async def build_itemset(champ, starts, builds, role):
-    # TODO: py36 merge below lines
-    item_ids = (await get_items())['data'].keys()
-    items = [Item(iid) for iid in item_ids]
+async def build_itemset(ckey, starts, builds, role):
+    items = [Item(iid) for iid in (await get_items())['data'].keys()]
     wants = await build_wants(builds, role)
     consumes = list(consumables(extra=True))
 
@@ -81,13 +73,14 @@ async def build_itemset(champ, starts, builds, role):
         ('Build', build),
         ('Options', options[:10]),
     ]
-    # TODO: py26
+
+    # TODO: py36
     # champ_items = [item for item in items
-    #                if await item.required_champion == champ]
+    #                if await item.required_champion == ckey]
     champ_items = []
     for item in items:
         required_champion = await item.required_champion
-        if required_champion == champ:
+        if required_champion == ckey:
             champ_items.append(item)
     # END TODO
     if champ_items:
