@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import sys
 
 import aiohttp
@@ -13,7 +14,7 @@ from .server import champs, efficiency, itemset, ping
 
 
 def api():
-    loop = asyncio.get_event_loop()
+    # logging.basicConfig(level=logging.DEBUG)
 
     asyncio.ensure_future(reset_championgg_cache())
     asyncio.ensure_future(reset_riot_cache())
@@ -25,6 +26,7 @@ def api():
     app.router.add_route('GET', r'/champ', champs)
     app.router.add_route('GET', r'/champ/{id:\d+}/itemset/{role:\w+}', itemset)
 
+    loop = asyncio.get_event_loop()
     handler = app.make_handler(access_log=None)
     server = loop.create_server(handler, '0.0.0.0', 8080)
     srv = loop.run_until_complete(server)
@@ -54,7 +56,7 @@ Options:
                       By default, this is:
                       "C:\\Program Files\\Riot Games\\League of Legends"
 """
-    # TODO: catch KeyboardInterrupt
+    # TODO: catch KeyboardInterrupt ?
     args = docopt.docopt(isg.__doc__, version='1.0.0', argv=sys.argv[1:])
 
     output = Output(args['--path'])
@@ -63,7 +65,7 @@ Options:
     loop = asyncio.get_event_loop()
     champ = loop.run_until_complete(parse_champs(args['--champ']))
     if not champ:
-        print('Could not find champion {}'.format(args['--champ']))
+        print('Could not find champion {}.'.format(args['--champ']))
         return
 
     output.ensure_paths(champ)
@@ -71,8 +73,9 @@ Options:
 
     print('Downloading itemsets...')
     itemsets = loop.run_until_complete(get_itemsets(champ, roles))
-    itemsets = [x for x in itemsets if x]
     print('Found {} itemsets'.format(len(itemsets)))
+    itemsets = [x for x in itemsets if x]
+    print('Filtered to {} itemsets.'.format(len(itemsets)))
 
     print('Saving itemsets...')
     for (ckey, role, iset) in tqdm.tqdm(itemsets):
