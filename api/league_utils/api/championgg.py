@@ -1,4 +1,6 @@
+# TODO: global session
 import asyncio
+import logging
 import os
 
 import aiohttp
@@ -16,10 +18,13 @@ API_ITEMS_START = API_BASE + '/champion/{}/items/starters'
 API_ITEMS_START_POPULAR = API_ITEMS_START + '/mostPopular?api_key=' + TOKEN
 API_ITEMS_START_BEST = API_ITEMS_START + '/mostWins?api_key=' + TOKEN
 
+logger = logging.getLogger()
+
 
 @async_lru_cache(maxsize=256)
 async def get_itemsets_best(ckey):
     assert TOKEN
+    logger.debug('get_itemsets_best(%s)', ckey)
     url = API_ITEMS_DONE_BEST.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
@@ -29,6 +34,7 @@ async def get_itemsets_best(ckey):
 @async_lru_cache(maxsize=256)
 async def get_itemsets_popular(ckey):
     assert TOKEN
+    logger.debug('get_itemsets_popular(%s)', ckey)
     url = API_ITEMS_DONE_POPULAR.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
@@ -38,6 +44,7 @@ async def get_itemsets_popular(ckey):
 @async_lru_cache(maxsize=256)
 async def get_itemstarts_best(ckey):
     assert TOKEN
+    logger.debug('get_itemstarts_best(%s)', ckey)
     url = API_ITEMS_START_BEST.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
@@ -47,6 +54,7 @@ async def get_itemstarts_best(ckey):
 @async_lru_cache(maxsize=256)
 async def get_itemstarts_popular(ckey):
     assert TOKEN
+    logger.debug('get_itemstarts_popular(%s)', ckey)
     url = API_ITEMS_START_POPULAR.format(ckey)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
