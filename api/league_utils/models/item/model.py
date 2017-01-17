@@ -14,8 +14,8 @@ logger = logging.getLogger()
 
 
 class Item:
-    def __init__(self, iid=None):
-        self.iid = iid
+    def __init__(self, iid):
+        self.iid = int(iid)
 
         self._cost = 0
         self._description = ''
