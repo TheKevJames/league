@@ -24,6 +24,7 @@ class Itemset:
         self._starts = {'best': {}, 'popular': {}}
 
         self._blocks = []
+        self._roles = []
 
         self._loaded = False
 
@@ -63,18 +64,17 @@ class Itemset:
             } for name, items in self._blocks],
         }
 
+    @property
+    async def roles(self):
+        await self.load_data()
+        return self._roles
+
     async def load_data(self):
         if self._loaded:
             return
 
         try:
             self._ckey = (await get_champ(self.cid))['key']
-
-            best = await get_itemsets_best(self._ckey)
-            popular = await get_itemsets_popular(self._ckey)
-
-            starts_best = await get_itemstarts_best(self._ckey)
-            starts_popular = await get_itemstarts_popular(self._ckey)
         except (aiohttp.ClientDisconnectedError, asyncio.CancelledError):
             raise
         except AssertionError as e:
@@ -83,41 +83,32 @@ class Itemset:
             logger.exception(e)
             raise APIError(500, 'error looking up champ {}'.format(self.cid))
 
-        for iset in best:
+        best = asyncio.ensure_future(get_itemsets_best(self._ckey))
+        pop = asyncio.ensure_future(get_itemsets_popular(self._ckey))
+        sbest = asyncio.ensure_future(get_itemstarts_best(self._ckey))
+        spop = asyncio.ensure_future(get_itemstarts_popular(self._ckey))
+
+        for iset in await best:
             items = [Item(i) for i in iset['items']]
+            self._builds['best'][iset['role'].lower()] = items
 
-            role = iset['role'].lower()
-            self._builds['best'][role] = items
-
-            if role != self.role or not items:
-                continue
-
-            # TODO: hide/show?
-            title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
-            self._blocks.append((title, items))
-
-        for iset in popular:
+        for iset in await pop:
             items = [Item(i) for i in iset['items']]
+            self._builds['popular'][iset['role'].lower()] = items
 
-            role = iset['role'].lower()
-            self._builds['popular'][role] = items
-
-            if role != self.role or not items:
-                continue
-
-            # TODO: hide/show?
-            title = 'champion.gg Most Popular ({}%)'.format(iset['winPercent'])
-            self._blocks.append((title, items))
-
-        for iset in starts_best:
+        for iset in await sbest:
             items = [Item(i) for i in iset['items']]
             self._starts['best'][iset['role'].lower()] = items
 
-        for iset in starts_popular:
+        for iset in await spop:
             items = [Item(i) for i in iset['items']]
             self._starts['popular'][iset['role'].lower()] = items
 
-        if self._blocks:
+        self._roles = self._builds['best'].keys()
+        if self.role in self._roles:
+            title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
+            self._blocks.append((title, self._builds['best'][self.role]))
+
             # Implies API had data for this champ & role
             iset = await build_itemset(self._ckey, self._starts, self._builds,
                                        self.role)
