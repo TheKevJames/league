@@ -68,7 +68,7 @@ Options:
         return
 
     output.ensure_paths(champ)
-    roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
+    roles = ['Top', 'Jungle', 'Middle', 'ADC', 'Support']
 
     print('Downloading itemsets...')
     itemsets = loop.run_until_complete(get_itemsets(champ, roles))
