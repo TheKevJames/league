@@ -1,6 +1,7 @@
 import asyncio
 import collections
 import functools
+import itertools
 import operator
 
 
@@ -37,6 +38,10 @@ def async_lru_cache(maxsize=128):
         return memoizer
 
     return decorator
+
+
+def include(*l):
+    return list(collections.OrderedDict.fromkeys(itertools.chain(*l)))
 
 
 def without(lh, *rh):

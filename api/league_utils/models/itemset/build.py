@@ -4,7 +4,7 @@ import operator
 
 from ...api.riot import get_items
 from ...models import Item
-from ...utils import without
+from ...utils import include, without
 from .constants import BOOTS, CONSUMABLES, CONSUMABLES_EXTRA
 
 
@@ -63,14 +63,16 @@ async def build_itemset(ckey, starts, builds, role):
     wants = await build_wants(builds, role)
     consumes = list(consumables(extra=True))
 
-    early = starts['best'][role] + await reorder(boots(), wants)
-    build = without(builds['best'][role], early, consumes)
+    early = include(starts['best'][role], starts['popular'][role],
+                    await reorder(boots(), wants))
+    build = without(include(builds['best'][role], builds['popular'][role]),
+                    early, consumes)
     options = without(await reorder(items, wants), build, early, consumes)
 
     isg = [
         ('Consumables', consumables()),
         ('Early & Boots', early[:10]),
-        ('Build', build),
+        ('Build', build[:10]),
         ('Options', options[:10]),
     ]
 
