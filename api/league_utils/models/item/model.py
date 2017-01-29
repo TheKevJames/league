@@ -31,6 +31,15 @@ class Item:
 
         self._loaded = False
 
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.iid == other.iid
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.iid)
+
     @property
     async def cost(self):
         await self.load_data()

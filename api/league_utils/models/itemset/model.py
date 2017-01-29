@@ -28,6 +28,16 @@ class Itemset:
 
         self._loaded = False
 
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.cid == other.cid \
+            and self.role == other.role
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash('{}-{}'.format(self.cid, self.role))
+
     @classmethod
     async def from_cid_and_role(cls, cid, role):
         self = Itemset()
