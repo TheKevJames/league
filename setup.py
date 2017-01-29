@@ -2,38 +2,33 @@
 import setuptools
 
 
-# I prefer Markdown to reStructuredText. PyPI does not.
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
-    long_description = ''
-
-
 setuptools.setup(
     name='league-utils',
-    use_scm_version=True,
+    version='1.0.0',
     description='League of Legends utilities, including an Item Set Generator',
-    long_description=long_description,
-    keywords='league of legends game utilities item set generator isg',
+    long_description=open('README.rst', 'r').read(),
+    keywords='league legends game utilities item set generator efficiency isg',
     author='Kevin James',
     author_email='KevinJames@thekev.in',
     url='https://github.com/TheKevJames/league.git',
     license='MIT License',
     packages=setuptools.find_packages(),
-    install_requires=['beautifulsoup4', 'docopt', 'requests', 'riotwatcher'],
-    setup_requires=['pytest-runner', 'setuptools_scm'],
+    install_requires=['aiohttp', 'docopt', 'tqdm'],
+    setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov', 'pytest-pep8'],
     classifiers=[
         'Programming Language :: Python',
-        'Development Status :: 4 - Beta',
+        'Programming Language :: Python :: 3 :: Only',
+        'Development Status :: 5 - Production/Stable',
         'Natural Language :: English',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
     ],
+    include_package_data=True,
     entry_points={
         'console_scripts': [
-            'league-utils = league_utils.entrypoint:run',
+            'league-utils-api = league_utils.entrypoint:api',
+            'league-utils-isg = league_utils.entrypoint:isg',
         ],
     },
 )

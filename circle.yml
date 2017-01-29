@@ -1,18 +1,24 @@
 machine:
   environment:
+    CHAMPIONGG_TOKEN: dummy-token
     LEAGUE_TOKEN: dummy-token
+  post:
+    - pyenv versions  # TODO: get py36, bugfix releases of py35
+    - pyenv global 3.5.0
 
 dependencies:
-  override:
-    - pip install -r requirements.txt
-    - pip install -r requirements-dev.txt
-    - pip install coveralls
+  pre:
+    - pip3.5 install -r requirements.txt
+    - pip3.5 install -r requirements-dev.txt
+    - pip3.5 install coveralls
 
-    - python setup.py install
+    - pip3.5 install -U docker-compose
+  override:
+    - python3.5 setup.py install
 
 test:
   override:
-    - python setup.py test
+    - python3.5 setup.py test
     - tox
 
   post:
@@ -33,18 +39,18 @@ deployment:
       - echo "username:$PYPI_USERNAME" >> ~/.pypirc
       - echo "password:$PYPI_PASSWORD" >> ~/.pypirc
 
-      - .tox/py34/bin/python setup.py register
+      - .tox/py35/bin/python setup.py register
 
-      - .tox/py34/bin/python setup.py sdist upload
+      - .tox/py35/bin/python setup.py sdist upload
 
-      - .tox/py27/bin/python setup.py bdist_egg upload
-      - .tox/py34/bin/python setup.py bdist_egg upload
+      - .tox/py35/bin/python setup.py bdist_egg upload
+      # - .tox/py36/bin/python setup.py bdist_egg upload
 
-      - .tox/py34/bin/python setup.py bdist_wheel upload
+      - .tox/py35/bin/python setup.py bdist_wheel upload
 
       - rm -f ~/.pypirc
 
-      - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" --pre-release || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" --pre-release
+      - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')"
 
       - pyinstaller --onefile league-utils.py
       - ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "league-utils-linux-amd64" --file dist/league-utils

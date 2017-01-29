@@ -2,7 +2,7 @@ version: '2'
 
 services:
   api:
-    build: api/.
+    build: .
     image: thekevjames/league-utils-api
     environment:
       - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}

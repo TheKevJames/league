@@ -1,5 +1,4 @@
 pyinstaller
-pypandoc
 pytest
 pytest-cov
 pytest-pep8
