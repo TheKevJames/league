@@ -5,7 +5,7 @@ LeagueUtils is a set of utilities for interacting with League of Legends data.
 Currently, it contains the League ISG (Item Set Generator) and an API for item
 gold efficiency.
 
-|version| |downloads| |build| |coverage| |codacy| |landscape| |requirements|
+|version| |build| |coverage| |codacy| |landscape| |requirements|
 
 ISG
 ---
