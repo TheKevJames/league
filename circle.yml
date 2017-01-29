@@ -52,5 +52,5 @@ deployment:
 
       - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')"
 
-      - pyinstaller --onefile league-utils.py
+      - python3.5 `which pyinstaller` --onefile league-utils.py
       - ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "league-utils-linux-amd64" --file dist/league-utils
