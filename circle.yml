@@ -2,17 +2,17 @@ machine:
   environment:
     CHAMPIONGG_TOKEN: dummy-token
     LEAGUE_TOKEN: dummy-token
-  post:
-    - pyenv versions  # TODO: get py36, bugfix releases of py35
-    - pyenv global 3.5.0
+  # post:
+  #   - pyenv versions  # TODO: get py36, bugfix releases of py35
+  #   - pyenv global 3.5.0
+  python:
+    version: 3.5.0
 
 dependencies:
   pre:
     - pip3.5 install -r requirements.txt
     - pip3.5 install -r requirements-dev.txt
     - pip3.5 install coveralls
-
-    - pip3.5 install -U docker-compose
   override:
     - python3.5 setup.py install
 

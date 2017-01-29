@@ -1,3 +1,4 @@
+hypothesis
 pyinstaller
 pytest
 pytest-cov

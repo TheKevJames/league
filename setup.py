@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=['aiohttp', 'docopt', 'tqdm'],
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov', 'pytest-pep8'],
+    tests_require=['hypothesis', 'pytest', 'pytest-cov', 'pytest-pep8'],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
