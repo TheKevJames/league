@@ -59,7 +59,8 @@ Options:
     args = docopt.docopt(isg.__doc__, version='1.0.0', argv=sys.argv[1:])
 
     output = Output(args['--path'])
-    print('Using League install path: {}'.format(output.path))
+    print('Using League install path: "{}"'.format(output.path))
+    print()
 
     loop = asyncio.get_event_loop()
     champ = loop.run_until_complete(parse_champs(args['--champ']))
@@ -72,9 +73,9 @@ Options:
 
     print('Downloading itemsets...')
     itemsets = loop.run_until_complete(get_itemsets(champ, roles))
-    print('Found {} itemsets'.format(len(itemsets)))
     itemsets = [x for x in itemsets if x]
-    print('Filtered to {} itemsets.'.format(len(itemsets)))
+    print('Found {} itemsets'.format(len(itemsets)))
+    print()
 
     print('Saving itemsets...')
     for (ckey, role, iset) in tqdm.tqdm(itemsets):
