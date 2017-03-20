@@ -75,6 +75,7 @@ VOID = {
     'FlatGoldPer10Mod': 0,
     'PercentDamageReductionCritMod': 0,
     'PercentPhysicalDamageMod': 0,
+    'PercentWardVisionMod': 0,
 }
 
 ITEM_WORTH = {

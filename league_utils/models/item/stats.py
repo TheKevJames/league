@@ -43,6 +43,7 @@ ITEM_DESCRIPTION_STAT_KEYS = {
     'Movement Speed': '{}MovementSpeedMod',
     'Movement Speed out of Combat': '{}MovementSpeedOutOfCombatMod',
     'Bonus Armor Penetration': '{}ArmorPenetrationMod',
+    'reduced ward vision radius': '{}WardVisionMod',
 }
 
 logger = logging.getLogger()
