@@ -2,29 +2,31 @@ machine:
   environment:
     CHAMPIONGG_TOKEN: dummy-token
     LEAGUE_TOKEN: dummy-token
-  # post:
-  #   - pyenv versions  # TODO: get py36, bugfix releases of py35
-  #   - pyenv global 3.5.0
-  python:
-    version: 3.5.0
 
 dependencies:
   pre:
-    - pip3.5 install -r requirements.txt
-    - pip3.5 install -r requirements-dev.txt
-    - pip3.5 install coveralls
+    - pyenv install --list
+
+    - test -e /opt/circleci/.pyenv/versions/3.5-dev || pyenv install 3.5-dev
+    - test -e /opt/circleci/.pyenv/versions/3.6-dev || pyenv install 3.6-dev
+    - test -e /opt/circleci/.pyenv/versions/3.7-dev || pyenv install 3.7-dev
+    - pyenv local 3.5.2 3.5-dev 3.6.0 3.6-dev 3.7-dev
+
   override:
-    - python3.5 setup.py install
+    - pip install tox tox-pyenv
+    - tox --notest
+
+  cache_directories:
+    - "/opt/circleci/.pyenv"
+    - ".tox"
 
 test:
   override:
-    - python3.5 setup.py test
     - tox
 
   post:
     - mv htmlcov $CIRCLE_ARTIFACTS/coverage
     - mv .junitxml $CIRCLE_TEST_REPORTS/junit.xml
-    - coveralls
     - git fetch --tags
 
 deployment:
@@ -44,7 +46,7 @@ deployment:
       - .tox/py35/bin/python setup.py sdist upload
 
       - .tox/py35/bin/python setup.py bdist_egg upload
-      # - .tox/py36/bin/python setup.py bdist_egg upload
+      - .tox/py36/bin/python setup.py bdist_egg upload
 
       - .tox/py35/bin/python setup.py bdist_wheel upload
 
@@ -52,5 +54,5 @@ deployment:
 
       - ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')"
 
-      - python3.5 `which pyinstaller` --onefile league-utils.py
+      - .tox/py35/bin/pyinstaller --onefile league-utils.py
       - ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag $(git tag --sort=version:refname | tail -n1) --name "league-utils-linux-amd64" --file dist/league-utils

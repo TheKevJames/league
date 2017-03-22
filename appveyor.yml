@@ -22,7 +22,7 @@ test_script:
   - "python setup.py test"
 
 after_test:
-  - "curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/windows-amd64-github-release.zip > github-release.zip"
+  - "appveyor DownloadFile https://github.com/aktau/github-release/releases/download/v0.6.2/windows-amd64-github-release.zip -FileName github-release.zip"
   - "unzip github-release.zip"
   - "rm -f github-release.zip"
 

@@ -1,5 +1,6 @@
 .cache/
 .eggs/
+.hypothesis/
 .tox/
 build/
 dist/
