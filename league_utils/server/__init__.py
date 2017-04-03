@@ -35,7 +35,7 @@ async def champs(_request):
                 'status': e.status,
                 'title': str(e),
             }]})
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         logger.exception(e)
         SENTRY.captureException()
         return aiohttp.web.json_response(status=500, data={
@@ -72,7 +72,7 @@ async def efficiency(request):
                 'status': e.status,
                 'title': str(e),
             }]})
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         logger.exception(e)
         SENTRY.captureException()
         return aiohttp.web.json_response(status=500, data={
@@ -98,7 +98,7 @@ async def itemset(request):
                 'status': e.status,
                 'title': str(e),
             }]})
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         logger.exception(e)
         SENTRY.captureException()
         return aiohttp.web.json_response(status=500, data={

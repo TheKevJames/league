@@ -24,4 +24,6 @@
         - -d invalid-name
         - -d locally-disabled
         - -d missing-docstring
+        # TODO: figure out how to tune this
+        - -d duplicate-code
         exclude: "^old/*"

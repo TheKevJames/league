@@ -5,6 +5,7 @@ logger = logging.getLogger()
 
 
 def get_missing_tags(iid, name):
+    # pylint: disable=too-many-return-statements
     if 'Biscuit of Rejuvenation' in name:
         return {'Consumable', 'HealthRegen', 'ManaRegen'}
 

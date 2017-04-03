@@ -102,7 +102,7 @@ async def parse_single_chunk(description):
         kind, value = parse_value(dvalue)
         key = ITEM_DESCRIPTION_STAT_KEYS[dkey].format(kind)
         return ({key: value}, {})
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         logger.exception(e)
         SENTRY.captureException()
         return ({}, {dkey: dvalue})
@@ -131,7 +131,7 @@ async def parse_chunk(title, description):
             key = ITEM_DESCRIPTION_STAT_KEYS[dkey].format(kind)
             stats[key] = value
             return (stats, {})
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logger.exception(e)
             SENTRY.captureException()
             return (stats, {dkey: dvalue})
@@ -140,7 +140,7 @@ async def parse_chunk(title, description):
         dvalue = ON_HIT.match(description.lower()).groups()[0]
         try:
             return (parse_onhit(description.lower()), {})
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logger.exception(e)
             SENTRY.captureException()
             return ({}, {'OnHit': dvalue})
@@ -150,7 +150,7 @@ async def parse_chunk(title, description):
             _, dvalue, dkey = description.split(' ', 2)
             if dkey == 'Health every 5 seconds':
                 return ({'FlatHPRegenMod': float(dvalue) / 5}, {})
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logger.exception(e)
             SENTRY.captureException()
 

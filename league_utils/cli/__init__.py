@@ -81,7 +81,7 @@ async def parse_champs(champ):
             name = c['attributes']['name']
             if name.lower() == champ or ckey.lower() == champ:
                 return [(int(c['id']), ckey)]
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         print('Could not find champion {}.'.format(champ))
         sys.exit(1)
 

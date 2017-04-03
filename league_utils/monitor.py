@@ -7,6 +7,7 @@ try:
     SENTRY = raven.Client(dsn=SENTRY_DSN)
 except ImportError:
     class ravenClient:
+        # pylint: disable=too-few-public-methods
         def captureException(self):
             pass
 

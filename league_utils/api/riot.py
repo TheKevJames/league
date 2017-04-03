@@ -73,7 +73,7 @@ async def reset_cache():
 
             await asyncio.gather(*tasks)
             logger.debug('riot cache refreshed')
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logger.error('error refreshing riot cache')
             logger.exception(e)
 
