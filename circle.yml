@@ -7,9 +7,9 @@ dependencies:
   pre:
     - pyenv install --list
 
-    - test -e /opt/circleci/.pyenv/versions/3.5-dev || pyenv install 3.5-dev
-    - test -e /opt/circleci/.pyenv/versions/3.6-dev || pyenv install 3.6-dev
-    - test -e /opt/circleci/.pyenv/versions/3.7-dev || pyenv install 3.7-dev
+    - test -e /opt/circleci/python/3.5-dev || pyenv install 3.5-dev
+    - test -e /opt/circleci/python/3.6-dev || pyenv install 3.6-dev
+    - test -e /opt/circleci/python/3.7-dev || pyenv install 3.7-dev
     - pyenv local 3.5.2 3.5-dev 3.6.0 3.6-dev 3.7-dev
 
   override:
@@ -17,7 +17,10 @@ dependencies:
     - tox --notest
 
   cache_directories:
-    - "/opt/circleci/.pyenv"
+    # TODO: this probably invalidates the idea of testing off dev pythons...
+    - "/opt/circleci/python/3.5-dev"
+    - "/opt/circleci/python/3.6-dev"
+    - "/opt/circleci/python/3.7-dev"
     - ".tox"
 
 test:
