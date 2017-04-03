@@ -25,7 +25,7 @@ dependencies:
 
 test:
   override:
-    - pre-commit run --all-files
+    - .tox/py35/bin/python pre-commit run --all-files
     - tox
 
   post:
