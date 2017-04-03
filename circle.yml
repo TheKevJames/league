@@ -3,6 +3,9 @@ machine:
     CHAMPIONGG_TOKEN: dummy-token
     LEAGUE_TOKEN: dummy-token
 
+  python:
+    version: 3.5.2
+
 dependencies:
   pre:
     - pyenv install --list
