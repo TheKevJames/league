@@ -12,13 +12,14 @@ environment:
 install:
   - "SET PATH=C:\\Python35;C:\\Python35\\Scripts;%PATH%"
 
-  - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
+  - "pip install -r requirements.txt"
 
 build_script:
   - "python setup.py build"
 
 test_script:
+  - "pre-commit run --all-files"
   - "python setup.py test"
 
 after_test:
