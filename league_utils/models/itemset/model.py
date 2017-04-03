@@ -15,6 +15,7 @@ logger = logging.getLogger()
 
 
 class Itemset:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         self.cid = None
         self.role = None

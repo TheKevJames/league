@@ -187,6 +187,7 @@ async def build_stats_block(chunk, start='<stats>', end='</stats>', br='<br>'):
     return parsed_stats, unparseable_stats
 
 async def build_stats_from_chunk(chunk, start, end, br='<br>'):
+    # pylint: disable=too-many-locals
     futures = []
     idx = -1
     while True:

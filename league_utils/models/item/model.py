@@ -14,6 +14,7 @@ logger = logging.getLogger()
 
 
 class Item:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, iid):
         self.iid = int(iid)
 
