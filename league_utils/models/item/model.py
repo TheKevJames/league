@@ -116,7 +116,7 @@ class Item:
             raise APIError(500, 'error looking up item {}'.format(self.iid))
 
         self._cost = int(data.get('gold', {}).get('total', 0))
-        self._description = data.get('description', "Missing description.")
+        self._description = data.get('description', 'Missing description.')
         self._name = data.get('name', 'missing-name')
         self._required_champion = data.get('requiredChampion', '')
 

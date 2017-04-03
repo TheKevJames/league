@@ -58,7 +58,7 @@ def parse_value(value):
 
 def parse_onhit(onhit):
     dvalue = ON_HIT.match(onhit).groups()[0]
-    if "of ability power" in onhit:
+    if 'of ability power' in onhit:
         flat, percent, _ = dvalue.split(' ', 2)
         value = int(percent[2:-1]) / 100
         value *= 100
@@ -69,11 +69,11 @@ def parse_onhit(onhit):
     elif "target's maximum health" in onhit:
         value = int(dvalue.split(' ', 1)[0][:-1]) / 100
         value *= 1250
-    elif "total attack damage" in onhit:
+    elif 'total attack damage' in onhit:
         low, _, high, _ = dvalue.split(' ', 3)
         value = ((int(low[:-1]) + int(high[:-1])) / 2) / 100
         value *= 125
-    elif "your maximum health" in onhit:
+    elif 'your maximum health' in onhit:
         flat, _, percent, _ = dvalue.split(' ', 3)
         value = int(percent[:-1]) / 100
         value *= 2500
