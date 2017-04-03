@@ -15,6 +15,7 @@ dependencies:
   override:
     - pip install tox tox-pyenv
     - tox --notest
+    - .tox/py35/bin/pip install pre-commit
 
   cache_directories:
     # TODO: this probably invalidates the idea of testing off dev pythons...
@@ -25,7 +26,7 @@ dependencies:
 
 test:
   override:
-    - .tox/py35/bin/python pre-commit run --all-files
+    - .tox/py35/bin/pre-commit run --all-files
     - tox
 
   post:
