@@ -3,9 +3,6 @@ machine:
     CHAMPIONGG_TOKEN: dummy-token
     LEAGUE_TOKEN: dummy-token
 
-  python:
-    version: 3.5.2
-
 dependencies:
   pre:
     - pyenv install --list
@@ -16,7 +13,7 @@ dependencies:
     - pyenv local 3.5.2 3.5-dev 3.6.0 3.6-dev 3.7-dev
 
   override:
-    - pip install pre-commit tox tox-pyenv
+    - pip install tox tox-pyenv
     - tox --notest
 
   cache_directories:
@@ -25,7 +22,7 @@ dependencies:
 
 test:
   override:
-    - pre-commit run --all-files
+    - .tox/py35/bin/pre-commit run --all-files
     - tox
 
   post:
