@@ -10,55 +10,98 @@ from ..utils import async_lru_cache
 
 TOKEN = os.environ.get('CHAMPIONGG_TOKEN', '')
 
-API_BASE = 'http://api.champion.gg'
-API_ITEMS_DONE = API_BASE + '/champion/{}/items/finished'
-API_ITEMS_DONE_POPULAR = API_ITEMS_DONE + '/mostPopular?api_key=' + TOKEN
-API_ITEMS_DONE_BEST = API_ITEMS_DONE + '/mostWins?api_key=' + TOKEN
-API_ITEMS_START = API_BASE + '/champion/{}/items/starters'
-API_ITEMS_START_POPULAR = API_ITEMS_START + '/mostPopular?api_key=' + TOKEN
-API_ITEMS_START_BEST = API_ITEMS_START + '/mostWins?api_key=' + TOKEN
+API_BASE = 'http://api.champion.gg/v2'
+API_CHAMP_HASHES = API_BASE + '/champions/{}?champData=hashes&api_key=' + TOKEN
 
 logger = logging.getLogger()
 
 
 @async_lru_cache(maxsize=256)
-async def get_itemsets_best(ckey):
+async def get_itemsets_best(cid):
     assert TOKEN
-    logger.debug('get_itemsets_best(%s)', ckey)
-    url = API_ITEMS_DONE_BEST.format(ckey)
+    logger.debug('get_itemsets_best(%s)', cid)
+    url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
-        return await response.json()
+
+        # TODO: py36 (async generator)
+        isets = []
+        for role in await response.json():
+            itemsets = role['hashes']['finalitemshashfixed']
+            winrate = itemsets['highestWinrate']['winrate']
+            items = itemsets['highestWinrate']['hash'].split('-')[1:]
+            isets.append({
+                'role': role['role'],
+                'winrate': winrate,
+                'items': items})
+
+        return isets
 
 
 @async_lru_cache(maxsize=256)
-async def get_itemsets_popular(ckey):
+async def get_itemsets_popular(cid):
     assert TOKEN
-    logger.debug('get_itemsets_popular(%s)', ckey)
-    url = API_ITEMS_DONE_POPULAR.format(ckey)
+    logger.debug('get_itemsets_popular(%s)', cid)
+    url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
-        return await response.json()
+
+        # TODO: py36 (async generator)
+        isets = []
+        for role in await response.json():
+            itemsets = role['hashes']['finalitemshashfixed']
+            winrate = itemsets['highestCount']['winrate']
+            items = itemsets['highestCount']['hash'].split('-')[1:]
+            isets.append({
+                'role': role['role'],
+                'winrate': winrate,
+                'items': items})
+
+        return isets
 
 
 @async_lru_cache(maxsize=256)
-async def get_itemstarts_best(ckey):
+async def get_itemstarts_best(cid):
     assert TOKEN
-    logger.debug('get_itemstarts_best(%s)', ckey)
-    url = API_ITEMS_START_BEST.format(ckey)
+    logger.debug('get_itemstarts_best(%s)', cid)
+    url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
-        return await response.json()
+
+        # TODO: py36 (async generator)
+        isets = []
+        for role in await response.json():
+            itemsets = role['hashes']['firstitemshash']
+            winrate = itemsets['highestWinrate']['winrate']
+            items = itemsets['highestWinrate']['hash'].split('-')[1:]
+            isets.append({
+                'role': role['role'],
+                'winrate': winrate,
+                'items': items})
+
+        return isets
 
 
 @async_lru_cache(maxsize=256)
-async def get_itemstarts_popular(ckey):
+async def get_itemstarts_popular(cid):
     assert TOKEN
-    logger.debug('get_itemstarts_popular(%s)', ckey)
-    url = API_ITEMS_START_POPULAR.format(ckey)
+    logger.debug('get_itemstarts_popular(%s)', cid)
+    url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
         assert response.status == 200
-        return await response.json()
+
+        # TODO: py36 (async generator)
+        isets = []
+        for role in await response.json():
+            itemsets = role['hashes']['firstitemshash']
+            winrate = itemsets['highestCount']['winrate']
+            items = itemsets['highestCount']['hash'].split('-')[1:]
+            isets.append({
+                'role': role['role'],
+                'winrate': winrate,
+                'items': items})
+
+        return isets
 
 
 async def reset_cache():

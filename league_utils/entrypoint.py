@@ -13,6 +13,7 @@ from .server import champs, efficiency, itemset, ping
 
 
 def api():
+    # import logging
     # logging.basicConfig(level=logging.DEBUG)
 
     asyncio.ensure_future(reset_championgg_cache())

@@ -81,6 +81,15 @@ class Itemset:
         return self._roles
 
     async def load_data(self):
+        def convert_role(r):
+            # TODO: create role model (heh)
+            r = r.lower()
+            if r == 'duo_support':
+                return 'support'
+            elif r == 'duo_carry':
+                return 'adc'
+            return r
+
         if self._loaded:
             return
 
@@ -94,30 +103,41 @@ class Itemset:
             logger.exception(e)
             raise APIError(500, 'error looking up champ {}'.format(self.cid))
 
-        best = asyncio.ensure_future(get_itemsets_best(self._ckey))
-        pop = asyncio.ensure_future(get_itemsets_popular(self._ckey))
-        sbest = asyncio.ensure_future(get_itemstarts_best(self._ckey))
-        spop = asyncio.ensure_future(get_itemstarts_popular(self._ckey))
+        best = asyncio.ensure_future(get_itemsets_best(self.cid))
+        pop = asyncio.ensure_future(get_itemsets_popular(self.cid))
+        sbest = asyncio.ensure_future(get_itemstarts_best(self.cid))
+        spop = asyncio.ensure_future(get_itemstarts_popular(self.cid))
 
+        winrate = '?'
         for iset in await best:
+            role = convert_role(iset['role'])
             items = [Item(i) for i in iset['items']]
-            self._builds['best'][iset['role'].lower()] = items
+            if role == self.role:
+                winrate = '{0:.3f}'.format(iset['winrate'] * 100)
+
+            self._builds['best'][role] = items
 
         for iset in await pop:
+            role = convert_role(iset['role'])
             items = [Item(i) for i in iset['items']]
-            self._builds['popular'][iset['role'].lower()] = items
+
+            self._builds['popular'][role] = items
 
         for iset in await sbest:
+            role = convert_role(iset['role'])
             items = [Item(i) for i in iset['items']]
-            self._starts['best'][iset['role'].lower()] = items
+
+            self._starts['best'][role] = items
 
         for iset in await spop:
+            role = convert_role(iset['role'])
             items = [Item(i) for i in iset['items']]
-            self._starts['popular'][iset['role'].lower()] = items
+
+            self._starts['popular'][role] = items
 
         self._roles = self._builds['best'].keys()
         if self.role in self._roles:
-            title = 'champion.gg Best Winrate ({}%)'.format(iset['winPercent'])
+            title = 'champion.gg Best Winrate ({}%)'.format(winrate)
             self._blocks.append((title, self._builds['best'][self.role]))
 
             # Implies API had data for this champ & role
