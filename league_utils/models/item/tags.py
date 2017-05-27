@@ -29,13 +29,15 @@ def get_missing_tags(iid, name):
         elif 'Warrior' in name:
             return {'CooldownReduction', 'Damage', 'Jungle'}
 
-    if name in ('Entropy Field', 'Flash Zone',
+    if name in ('Dark Matter Scythe', 'Dark Star Sigil', 'Cosmic Shackle',
+                'Entropy Field', 'Flash Zone', 'Gravity Boots',
                 'Nexus Siege: Siege Weapon Slot', 'Port Pad',
                 'Shield Totem', 'Siege Ballista', 'Siege Refund',
                 'Siege Sight Warder', 'Siege Teleport',
                 'Siege Teleport (Inactive)', 'Siege Warp',
-                'Siege Warp (Inactive)', 'Tower: Beam of Ruination',
-                'Tower: Storm Bulwark', 'Tower Surge: Beam of Ruination',
+                'Siege Warp (Inactive)', 'Singularity Lantern',
+                'Tower: Beam of Ruination', 'Tower: Storm Bulwark',
+                'Tower Surge: Beam of Ruination',
                 'Tower Surge: Firestorm Bulwark', 'Vanguard Banner',
                 'Diet Poro-Snax', 'Poro-Snax', 'unknown-item'):
         return {}
