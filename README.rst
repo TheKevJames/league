@@ -153,6 +153,8 @@ of a huge number of things in this repo, but it doesn't yet do everything. This
 section is meant to remind me of the parts I have to do manually and thus need
 to get around to automating.
 
+::
+
     # OLD_TAG=$(git tag --sort=version:refname | tail -n1)
     find ./ -type f -exec sed -i "s/OLD_TAG/NEW_TAG/g" *.py {} \;  # OSX: -i ''
     clog -C CHANGELOG.md -F --new-version NEW_TAG
