@@ -18,8 +18,8 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
+      - run: apk add --no-cache gcc git libc-dev musl-dev ssh zlib-dev
       - checkout
-      - run: apk add --no-cache gcc git libc-dev musl-dev zlib-dev
       - run: pip install tox
       - run: tox -e py35
       - store_artifacts:
@@ -41,8 +41,8 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
+      - run: apk add --no-cache git ssh
       - checkout
-      - run: apk add --no-cache git
       - run: pip install tox
       - run: tox -e py36
       - store_artifacts:
@@ -64,8 +64,8 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git ssh
       - checkout
-      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
       - run: tox -e py35-dev
       - store_artifacts:
           path: htmlcov
@@ -79,8 +79,8 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git ssh
       - checkout
-      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
       - run: tox -e py36-dev
       - store_artifacts:
           path: htmlcov
@@ -94,8 +94,8 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git ssh
       - checkout
-      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
       - run: tox -e py37-dev
       - store_artifacts:
           path: htmlcov
