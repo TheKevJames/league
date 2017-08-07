@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name='league-utils',
-    version='1.0.2',
+    version='1.0.3',
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [

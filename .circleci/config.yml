@@ -132,6 +132,7 @@ jobs:
     docker:
       - image: python:3.6.2-alpine3.6
     steps:
+      - run: pip install twine
       - attach_workspace:
           at: dist
       - deploy:
@@ -149,6 +150,7 @@ jobs:
     docker:
       - image: python:3.6.2-alpine3.6
     steps:
+      - run: apk add --no-cache git openssh-client
       - checkout
       - run:
           name: install github-release
@@ -210,6 +212,8 @@ workflows:
           filters:
             branches:
               only: master
+            tags:
+              only: /.*/
           requires:
             - test-py35
             - test-py36
@@ -220,10 +224,10 @@ workflows:
       - deploy-tag:
           context: org-global
           filters:
-            tags:
-              only: /[0-9]+\.[0-9]+\.[0-9]+/
             branches:
               ignore: /.*/
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
           requires:
             - test-py35
             - test-py36
@@ -234,10 +238,10 @@ workflows:
       - deploy-pypi:
           context: org-global
           filters:
-            tags:
-              only: /[0-9]+\.[0-9]+\.[0-9]+/
             branches:
               ignore: /.*/
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
           requires:
             - test-py35
             - test-py36
@@ -248,10 +252,10 @@ workflows:
       - deploy-github:
           context: org-global
           filters:
-            tags:
-              only: /[0-9]+\.[0-9]+\.[0-9]+/
             branches:
               ignore: /.*/
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
           requires:
             - test-py35
             - test-py36

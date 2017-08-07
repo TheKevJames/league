@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name='league-utils',
-    version='1.0.2',
+    version='1.0.3',
     description='League of Legends utilities, including an Item Set Generator',
     long_description=open('README.rst', 'r').read(),
     keywords='league legends game utilities item set generator efficiency isg',
