@@ -136,36 +136,31 @@ jobs:
       - attach_workspace:
           at: dist
       - deploy:
-          name: register with pypi
-          command: |
-            twine register dist/league-utils-${CIRCLE_TAG}.tar.gz
-            twine register dist/league-utils-${CIRCLE_TAG}-py2.py3-none-any.whl
-            twine register dist/league-utils-${CIRCLE_TAG}-py3.5.egg
-            twine register dist/league-utils-${CIRCLE_TAG}-py3.6.egg
-      - deploy:
           name: upload to pypi
-          command: twine upload dist/*
+          command: twine upload dist/league-utils-*
 
   deploy-github:
     docker:
       - image: python:3.6.2-alpine3.6
     steps:
-      - run: apk add --no-cache git openssh-client
+      - run: apk add --no-cache curl git openssh-client
       - checkout
       - run:
           name: install github-release
           command: |
-            curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2 > github-release.tar.bz2
+            curl -L https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2 > github-release.tar.bz2
             tar xjf github-release.tar.bz2
             rm -f github-release.tar.bz2
       - deploy:
           name: create GitHub release
-          command: ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')"
+          command: |
+            git log $(git tag --sort=version:refname | tail -n2 | head -n1)..${CIRCLE_TAG}~1 --pretty=format:'- %s' > github-release-description.md
+            ./bin/linux/amd64/github-release release -r league -t "${CIRCLE_SHA1}" -d "$(cat github-release-description.md)" || ./bin/linux/amd64/github-release edit -r league -t "${CIRCLE_SHA1}" -d "$(cat github-release-description.md)"
       - attach_workspace:
           at: dist
       - deploy:
           name: upload linux binary to GitHub
-          command: ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "league-utils-linux-amd64" --file dist/league-utils
+          command: ./bin/linux/amd64/github-release upload -r league -t "${CIRCLE_SHA1}" -n "league-utils-linux-amd64" -f dist/league-utils
 
 workflows:
   version: 2

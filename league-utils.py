@@ -19,7 +19,7 @@ import league_utils.entrypoint
 
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='1.0.3', argv=sys.argv[1:])
+    args = docopt.docopt(__doc__, version='1.0.4', argv=sys.argv[1:])
 
     if args['api']:
         del sys.argv[1]
