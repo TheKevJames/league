@@ -169,21 +169,39 @@ workflows:
   version: 2
   check-build-and-deploy:
     jobs:
-      - check
+      - check:
+          filters:
+            tags:
+              only: /.*/
 
       - test-py35:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - check
       - test-py36:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - check
       - test-py35-dev:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - check
       - test-py36-dev:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - check
       - test-py37-dev:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - check
 
