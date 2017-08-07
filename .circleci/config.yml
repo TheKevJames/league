@@ -137,7 +137,7 @@ jobs:
           at: dist
       - deploy:
           name: upload to pypi
-          command: twine upload dist/league-utils-*
+          command: twine upload dist/*.tar.gz dist/*.egg dist/*.whl
 
   deploy-github:
     docker:
@@ -155,12 +155,12 @@ jobs:
           name: create GitHub release
           command: |
             git log $(git tag --sort=version:refname | tail -n2 | head -n1)..${CIRCLE_TAG}~1 --pretty=format:'- %s' > github-release-description.md
-            ./bin/linux/amd64/github-release release -r league -t "${CIRCLE_SHA1}" -d "$(cat github-release-description.md)" || ./bin/linux/amd64/github-release edit -r league -t "${CIRCLE_SHA1}" -d "$(cat github-release-description.md)"
+            ./bin/linux/amd64/github-release release -r league -t "${CIRCLE_TAG}" -d "$(cat github-release-description.md)" || ./bin/linux/amd64/github-release edit -r league -t "${CIRCLE_TAG}" -d "$(cat github-release-description.md)"
       - attach_workspace:
           at: dist
       - deploy:
           name: upload linux binary to GitHub
-          command: ./bin/linux/amd64/github-release upload -r league -t "${CIRCLE_SHA1}" -n "league-utils-linux-amd64" -f dist/league-utils
+          command: ./bin/linux/amd64/github-release upload -r league -t "${CIRCLE_TAG}" -n "league-utils-linux-amd64" -f dist/league-utils
 
 workflows:
   version: 2
