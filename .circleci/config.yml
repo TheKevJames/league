@@ -163,6 +163,17 @@ jobs:
           name: upload linux binary to GitHub
           command: ./bin/linux/amd64/github-release upload -t ${CIRCLE_TAG} -n league-utils-linux-amd64 -f dist/league-utils
 
+  deploy-production:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - deploy:
+          name: deploy image
+          command: |
+            ssh -oStrictHostKeyChecking=no ubuntu@thekev.in "
+              docker service update --image thekevjames/league-utils-api:latest thekevjames_league_utils_api
+            "
+
 workflows:
   version: 2
   check-build-and-deploy:
@@ -259,3 +270,13 @@ workflows:
             - test-py35-dev
             - test-py36-dev
             - test-py37-dev
+
+      - deploy-production:
+          context: org-global
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /.*/
+          requires:
+            - deploy-image
