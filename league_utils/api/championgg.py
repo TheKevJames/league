@@ -8,7 +8,13 @@ import aiohttp
 from ..utils import async_lru_cache
 
 
-TOKEN = os.environ.get('CHAMPIONGG_TOKEN', '')
+try:
+    TOKEN = os.environ['CHAMPIONGG_TOKEN']
+except KeyError:
+    try:
+        TOKEN = open('/run/secrets/championgg_token').read().rstrip()
+    except IOError:
+        TOKEN = None
 
 API_BASE = 'http://api.champion.gg/v2'
 API_CHAMP_HASHES = API_BASE + '/champions/{}?champData=hashes&api_key=' + TOKEN

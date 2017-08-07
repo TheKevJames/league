@@ -1,12 +1,34 @@
-version: '2'
+version: '3.2'
 
 services:
-  api:
+  league_utils_api:
     build: .
-    image: thekevjames/league-utils-api
+    image: thekevjames/league-utils-api:latest
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 20s
+      update_config:
+        parallelism: 1
+        monitor: 20s
     environment:
       - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}
       - RIOT_TOKEN=${LEAGUE_TOKEN}
       - SENTRY_DSN=${SENTRY_DSN_LEAGUE}
     ports:
       - "28006:8080"
+    secrets:
+      - championgg_token
+      - riot_token
+      - sentry_dsn_league
+
+secrets:
+  championgg_token:
+    external: true
+  riot_token:
+    external: true
+  sentry_dsn_league:
+    external: true

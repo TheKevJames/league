@@ -8,7 +8,13 @@ import aiohttp
 from ..utils import async_lru_cache
 
 
-TOKEN = os.environ.get('RIOT_TOKEN', '')
+try:
+    TOKEN = os.environ['RIOT_TOKEN']
+except KeyError:
+    try:
+        TOKEN = open('/run/secrets/riot_token').read().rstrip()
+    except IOError:
+        TOKEN = None
 API_HEADERS = {'X-Riot-Token': TOKEN}
 
 API_STATIC_DATA = 'https://na1.api.riotgames.com/lol/static-data/v3'

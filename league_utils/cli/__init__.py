@@ -11,7 +11,6 @@ import tqdm
 from ..error import CLIError
 
 
-# LEAGUE_UTILS_API = 'http://127.0.0.1:28006'
 LEAGUE_UTILS_API = 'https://league.thekev.in'
 
 

@@ -145,6 +145,22 @@ the following might make your life easier:
     docker-compose pull
     docker-compose up -d
 
+If you're looking for something a bit more production-ready, you can also deploy
+this project to a Docker Swarm cluster. In that case, you'll need to configure
+Docker secrets and deploy this to a stack:
+
+::
+
+    echo "my-championgg-token" | docker secret create championgg_token -
+    echo "my-riot-token" | docker secret create riot_token -
+    echo "my-sentry-dsn" | docker secret create sentry_dsn_league -
+
+    curl https://raw.githubusercontent.com/TheKevJames/thekev.in/master/docker-compose.yml > league.yml
+    docker stack deploy -c league.yml thekevjames
+
+    # to force an update to the latest build
+    docker service update --force thekevjames_league_utils_api
+
 Release Procedure
 =================
 
