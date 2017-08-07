@@ -18,7 +18,7 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
-      - run: apk add --no-cache gcc git libc-dev musl-dev ssh zlib-dev
+      - run: apk add --no-cache gcc git libc-dev musl-dev openssh-client zlib-dev
       - checkout
       - run: pip install tox
       - run: tox -e py35
@@ -41,7 +41,7 @@ jobs:
           CHAMPIONGG_TOKEN: dummy
           LEAGUE_TOKEN: dummy
     steps:
-      - run: apk add --no-cache git ssh
+      - run: apk add --no-cache git openssh-client
       - checkout
       - run: pip install tox
       - run: tox -e py36
