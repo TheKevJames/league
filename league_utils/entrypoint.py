@@ -57,7 +57,7 @@ Options:
                       "C:\\Program Files\\Riot Games\\League of Legends"
 """
     # TODO: catch KeyboardInterrupt ?
-    args = docopt.docopt(isg.__doc__, version='1.0.0', argv=sys.argv[1:])
+    args = docopt.docopt(isg.__doc__, version='1.0.1', argv=sys.argv[1:])
 
     output = Output(args['--path'])
     print('Using League install path: "{}"'.format(output.path))
