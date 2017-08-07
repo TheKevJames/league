@@ -18,8 +18,6 @@ services:
       - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}
       - RIOT_TOKEN=${LEAGUE_TOKEN}
       - SENTRY_DSN=${SENTRY_DSN_LEAGUE}
-    ports:
-      - "28006:8080"
     secrets:
       - championgg_token
       - riot_token

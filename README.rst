@@ -154,7 +154,7 @@ Docker secrets and deploy this to a stack:
     echo "my-riot-token" | docker secret create riot_token -
     echo "my-sentry-dsn" | docker secret create sentry_dsn_league -
 
-    curl https://raw.githubusercontent.com/TheKevJames/thekev.in/master/docker-compose.yml > league.yml
+    curl https://raw.githubusercontent.com/TheKevJames/league/master/docker-compose.yml > league.yml
     docker stack deploy -c league.yml thekevjames
 
     # to force an update to the latest build

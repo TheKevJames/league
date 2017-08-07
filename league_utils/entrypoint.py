@@ -28,7 +28,7 @@ def api():
 
     loop = asyncio.get_event_loop()
     handler = app.make_handler(access_log=None)
-    server = loop.create_server(handler, '0.0.0.0', 8080)
+    server = loop.create_server(handler, '0.0.0.0', 80)
     srv = loop.run_until_complete(server)
 
     try:
