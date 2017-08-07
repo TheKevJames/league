@@ -5,11 +5,13 @@
 re-release for CI
 
 
+
 <a name="1.0.4"></a>
 ## 1.0.4 (2017-08-06)
 
 
 re-release for CI
+
 
 
 <a name="1.0.3"></a>
@@ -19,11 +21,13 @@ re-release for CI
 re-release for CI
 
 
+
 <a name="1.0.2"></a>
 ## 1.0.2 (2017-08-06)
 
 
 re-release for CI
+
 
 
 <a name="1.0.1"></a>

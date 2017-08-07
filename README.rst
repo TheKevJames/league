@@ -157,10 +157,16 @@ to get around to automating.
 
     # OLD_TAG=$(git tag --sort=version:refname | tail -n1)
     find ./ -type f -exec sed -i "s/OLD_TAG/NEW_TAG/g" *.py {} \;  # OSX: -i ''
-    clog -C CHANGELOG.md -F --new-version NEW_TAG
+    clog -C CHANGELOG.md -F --setversion NEW_TAG
     git commit -am 'chore(release): release new version'
     git tag NEW_TAG
     git push
+
+At some point, I may consider integrating an "unreleased" changelog:
+
+::
+
+    clog -C CHANGELOG.md -F --setversion unreleased
 
 Disclaimer
 ==========
