@@ -141,7 +141,6 @@ the following might make your life easier:
 ::
 
     curl https://raw.githubusercontent.com/TheKevJames/league/master/docker-compose.yml > docker-compose.yml
-    mkdir -p api  # docker-compose oddity
     docker-compose pull
     docker-compose up -d
 
