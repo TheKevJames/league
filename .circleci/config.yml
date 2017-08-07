@@ -154,13 +154,14 @@ jobs:
       - deploy:
           name: create GitHub release
           command: |
-            git log $(git tag --sort=version:refname | tail -n2 | head -n1)..${CIRCLE_TAG}~1 --pretty=format:'- %s' > github-release-description.md
-            ./bin/linux/amd64/github-release release -r league -t "${CIRCLE_TAG}" -d "$(cat github-release-description.md)" || ./bin/linux/amd64/github-release edit -r league -t "${CIRCLE_TAG}" -d "$(cat github-release-description.md)"
+            git log $(git describe --tags HEAD~1)..${CIRCLE_TAG} --pretty=format:'- %s' > release-description.md
+            ./bin/linux/amd64/github-release release -t "${CIRCLE_TAG}" || true
+            cat release-description.md | ./bin/linux/amd64/github-release edit -t ${CIRCLE_TAG} -d -
       - attach_workspace:
           at: dist
       - deploy:
           name: upload linux binary to GitHub
-          command: ./bin/linux/amd64/github-release upload -r league -t "${CIRCLE_TAG}" -n "league-utils-linux-amd64" -f dist/league-utils
+          command: ./bin/linux/amd64/github-release upload -t ${CIRCLE_TAG} -n league-utils-linux-amd64 -f dist/league-utils
 
 workflows:
   version: 2
