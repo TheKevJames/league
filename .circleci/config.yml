@@ -1,0 +1,243 @@
+version: 2
+
+jobs:
+  check:
+    docker:
+      # https://github.com/docker-library/python/issues/155
+      # - image: python:3.5.2-alpine
+      - image: python:3.5.2
+    steps:
+      - checkout
+      - run: pip install pre-commit
+      - run: pre-commit run --all-files
+
+  test-py35:
+    docker:
+      - image: python:3.5-alpine
+        environment:
+          CHAMPIONGG_TOKEN: dummy
+          LEAGUE_TOKEN: dummy
+    steps:
+      - checkout
+      - run: apk add --no-cache gcc git libc-dev musl-dev zlib-dev
+      - run: pip install tox
+      - run: tox -e py35
+      - store_artifacts:
+          path: htmlcov
+      - store_test_results:
+          path: junit.xml
+      - run: python setup.py sdist bdist_egg bdist_wheel
+      - run: .tox/py35/bin/pyinstaller --onefile league-utils.py
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - league_utils-*-py3.5.egg
+            - league-utils
+
+  test-py36:
+    docker:
+      - image: python:3.6-alpine
+        environment:
+          CHAMPIONGG_TOKEN: dummy
+          LEAGUE_TOKEN: dummy
+    steps:
+      - checkout
+      - run: apk add --no-cache git
+      - run: pip install tox
+      - run: tox -e py36
+      - store_artifacts:
+          path: htmlcov
+      - store_test_results:
+          path: junit.xml
+      - run: python setup.py sdist bdist_egg bdist_wheel
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - league-utils-*.tar.gz
+            - league_utils-*-py2.py3-none-any.whl
+            - league_utils-*-py3.6.egg
+
+  test-py35-dev:
+    docker:
+      - image: themattrix/tox:latest
+        environment:
+          CHAMPIONGG_TOKEN: dummy
+          LEAGUE_TOKEN: dummy
+    steps:
+      - checkout
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
+      - run: tox -e py35-dev
+      - store_artifacts:
+          path: htmlcov
+      - store_test_results:
+          path: junit.xml
+
+  test-py36-dev:
+    docker:
+      - image: themattrix/tox:latest
+        environment:
+          CHAMPIONGG_TOKEN: dummy
+          LEAGUE_TOKEN: dummy
+    steps:
+      - checkout
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
+      - run: tox -e py36-dev
+      - store_artifacts:
+          path: htmlcov
+      - store_test_results:
+          path: junit.xml
+
+  test-py37-dev:
+    docker:
+      - image: themattrix/tox:latest
+        environment:
+          CHAMPIONGG_TOKEN: dummy
+          LEAGUE_TOKEN: dummy
+    steps:
+      - checkout
+      - run: DEBIAN_FRONTEND=noninteractive apt-get -qy update && apt-get install -qy git
+      - run: tox -e py37-dev
+      - store_artifacts:
+          path: htmlcov
+      - store_test_results:
+          path: junit.xml
+
+  deploy-image:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t thekevjames/league-utils-api:latest .
+      - deploy:
+          name: push latest image
+          command: |
+            docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+            docker push thekevjames/league-utils-api:latest
+
+  deploy-tag:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t "thekevjames/league-utils-api:${CIRCLE_TAG}" .
+      - deploy:
+          name: push tagged image
+          command: |
+            docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+            docker push "thekevjames/league-utils-api:${CIRCLE_TAG}"
+
+  deploy-pypi:
+    docker:
+      - image: python:3.6.2-alpine3.6
+    steps:
+      - attach_workspace:
+          at: dist
+      - deploy:
+          name: register with pypi
+          command: |
+            twine register dist/league-utils-${CIRCLE_TAG}.tar.gz
+            twine register dist/league-utils-${CIRCLE_TAG}-py2.py3-none-any.whl
+            twine register dist/league-utils-${CIRCLE_TAG}-py3.5.egg
+            twine register dist/league-utils-${CIRCLE_TAG}-py3.6.egg
+      - deploy:
+          name: upload to pypi
+          command: twine upload dist/*
+
+  deploy-github:
+    docker:
+      - image: python:3.6.2-alpine3.6
+    steps:
+      - checkout
+      - run:
+          name: install github-release
+          command: |
+            curl -L https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2 > github-release.tar.bz2
+            tar xjf github-release.tar.bz2
+            rm -f github-release.tar.bz2
+      - deploy:
+          name: create GitHub release
+          command: ./bin/linux/amd64/github-release release --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')" || ./bin/linux/amd64/github-release edit --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "LeagueUtils" --description "$(git log $(git tag --sort=version:refname | tail -n2 | head -n1)..$(git tag --sort=version:refname | tail -n1)~1 --pretty=format:'- %s')"
+      - attach_workspace:
+          at: dist
+      - deploy:
+          name: upload linux binary to GitHub
+          command: ./bin/linux/amd64/github-release upload --user TheKevJames --repo league --tag "${CIRCLE_SHA1}" --name "league-utils-linux-amd64" --file dist/league-utils
+
+workflows:
+  version: 2
+  check-build-and-deploy:
+    jobs:
+      - check
+
+      - test-py35:
+          requires:
+            - check
+      - test-py36:
+          requires:
+            - check
+      - test-py35-dev:
+          requires:
+            - check
+      - test-py36-dev:
+          requires:
+            - check
+      - test-py37-dev:
+          requires:
+            - check
+
+      - deploy-image:
+          context: org-global
+          filters:
+            branches:
+              only: master
+          requires:
+            - test-py35
+            - test-py36
+            # TODO: consider allowing dev failures
+            - test-py35-dev
+            - test-py36-dev
+            - test-py37-dev
+      - deploy-tag:
+          context: org-global
+          filters:
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              ignore: /.*/
+          requires:
+            - test-py35
+            - test-py36
+            # TODO: consider allowing dev failures
+            - test-py35-dev
+            - test-py36-dev
+            - test-py37-dev
+      - deploy-pypi:
+          context: org-global
+          filters:
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              ignore: /.*/
+          requires:
+            - test-py35
+            - test-py36
+            # TODO: consider allowing dev failures
+            - test-py35-dev
+            - test-py36-dev
+            - test-py37-dev
+      - deploy-github:
+          context: org-global
+          filters:
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              ignore: /.*/
+          requires:
+            - test-py35
+            - test-py36
+            # TODO: consider allowing dev failures
+            - test-py35-dev
+            - test-py36-dev
+            - test-py37-dev
