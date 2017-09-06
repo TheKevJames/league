@@ -102,18 +102,35 @@ jobs:
       - store_test_results:
           path: junit.xml
 
-  deploy-image:
+  push-image:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout
       - setup_remote_docker
-      - run: docker build -t thekevjames/league-utils-api:latest .
+      - run: docker build -t api .
       - deploy:
-          name: push latest image
+          name: login to dockerhub
+          command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+      - deploy:
+          name: push image (hash)
+          command: |
+            docker tag api "thekevjames/league-utils-api:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:8}"
+            docker push "thekevjames/league-utils-api:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:8}"
+      - deploy:
+          name: push image (branch)
           command: |
             docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-            docker push thekevjames/league-utils-api:latest
+            docker tag api "thekevjames/league-utils-api:${CIRCLE_BRANCH}"
+            docker push "thekevjames/league-utils-api:${CIRCLE_BRANCH}"
+      - deploy:
+          name: push image (latest)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+              docker tag api thekevjames/league-utils-api:latest
+              docker push thekevjames/league-utils-api:latest
+            fi
 
   deploy-tag:
     docker:
@@ -171,7 +188,7 @@ jobs:
           name: deploy image
           command: |
             ssh -oStrictHostKeyChecking=no ubuntu@thekev.in "
-              docker service update --image thekevjames/league-utils-api:latest thekevjames_league_utils_api
+              docker service update --image thekevjames/league-utils-api:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:8} thekevjames_league_utils_api
             "
 
 workflows:
@@ -214,11 +231,9 @@ workflows:
           requires:
             - check
 
-      - deploy-image:
+      - push-image:
           context: org-global
           filters:
-            branches:
-              only: master
             tags:
               only: /.*/
           requires:
@@ -228,6 +243,7 @@ workflows:
             - test-py35-dev
             - test-py36-dev
             - test-py37-dev
+
       - deploy-tag:
           context: org-global
           filters:
@@ -279,4 +295,4 @@ workflows:
             tags:
               only: /.*/
           requires:
-            - deploy-image
+            - push-image
