@@ -200,8 +200,8 @@ blindly following its advice won't drop your ELO. You've been warned.
     :target: https://pypi.python.org/pypi/league-utils
 .. |landscape| image:: https://landscape.io/github/TheKevJames/league/master/landscape.svg?style=flat
     :target: https://landscape.io/github/TheKevJames/league/master
-.. |requirements| image:: https://pyup.io/repos/github/thekevjames/league/shield.svg
-    :target: https://pyup.io/repos/github/thekevjames/league/
+.. |requirements| image:: https://pyup.io/repos/github/TheKevJames/league/shield.svg
+    :target: https://pyup.io/repos/github/TheKevJames/league/
 .. |version| image:: https://img.shields.io/pypi/v/league-utils.svg
     :target: https://pypi.python.org/pypi/league-utils
 
