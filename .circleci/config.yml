@@ -185,8 +185,8 @@ jobs:
       - deploy:
           name: deploy image
           command: |
-            ssh -oStrictHostKeyChecking=no ubuntu@thekev.in "
-              docker service update --image thekevjames/league-utils-api:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:8} thekevjames_league_utils_api
+            ssh -oStrictHostKeyChecking=no kevin@thekev.in "
+              sudo docker service update --image thekevjames/league-utils-api:${CIRCLE_BRANCH}-${CIRCLE_SHA1:0:8} thekevjames_league_utils_api
             "
 
 workflows:
