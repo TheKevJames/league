@@ -26,7 +26,6 @@ labels:
     color: d93f0b
   - name: question
     color: cc317c
-
   - name: backlog
     color: ededed
   - name: in-progress
