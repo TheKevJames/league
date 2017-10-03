@@ -120,14 +120,12 @@ jobs:
       - deploy:
           name: push image (branch)
           command: |
-            docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
             docker tag api "thekevjames/league-utils-api:${CIRCLE_BRANCH}"
             docker push "thekevjames/league-utils-api:${CIRCLE_BRANCH}"
       - deploy:
           name: push image (latest)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
               docker tag api thekevjames/league-utils-api:latest
               docker push thekevjames/league-utils-api:latest
             fi
