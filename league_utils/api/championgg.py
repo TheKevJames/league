@@ -28,7 +28,9 @@ async def get_itemsets_best(cid):
     logger.debug('get_itemsets_best(%s)', cid)
     url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
-        assert response.status == 200
+        if response.status != 200:
+            logger.error(response.text)
+            assert False
 
         # TODO: py36 (async generator)
         isets = []
@@ -50,7 +52,9 @@ async def get_itemsets_popular(cid):
     logger.debug('get_itemsets_popular(%s)', cid)
     url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
-        assert response.status == 200
+        if response.status != 200:
+            logger.error(response.text)
+            assert False
 
         # TODO: py36 (async generator)
         isets = []
@@ -72,7 +76,9 @@ async def get_itemstarts_best(cid):
     logger.debug('get_itemstarts_best(%s)', cid)
     url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
-        assert response.status == 200
+        if response.status != 200:
+            logger.error(response.text)
+            assert False
 
         # TODO: py36 (async generator)
         isets = []
@@ -94,7 +100,9 @@ async def get_itemstarts_popular(cid):
     logger.debug('get_itemstarts_popular(%s)', cid)
     url = API_CHAMP_HASHES.format(cid)
     async with aiohttp.ClientSession() as client, client.get(url) as response:
-        assert response.status == 200
+        if response.status != 200:
+            logger.error(response.text)
+            assert False
 
         # TODO: py36 (async generator)
         isets = []

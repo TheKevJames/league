@@ -33,7 +33,10 @@ async def get_champ(cid):
     url = API_CHAMP.format(cid)
     async with aiohttp.ClientSession() as client:
         async with client.get(url, headers=API_HEADERS) as response:
-            assert response.status == 200
+            if response.status != 200:
+                logger.error(response.text)
+                assert False
+
             return await response.json()
 
 
@@ -44,7 +47,10 @@ async def get_champs():
     url = API_CHAMPS
     async with aiohttp.ClientSession() as client:
         async with client.get(url, headers=API_HEADERS) as response:
-            assert response.status == 200
+            if response.status != 200:
+                logger.error(response.text)
+                assert False
+
             return await response.json()
 
 
@@ -55,7 +61,10 @@ async def get_item(iid):
     url = API_ITEM.format(iid)
     async with aiohttp.ClientSession() as client:
         async with client.get(url, headers=API_HEADERS) as response:
-            assert response.status == 200
+            if response.status != 200:
+                logger.error(response.text)
+                assert False
+
             return await response.json()
 
 
@@ -66,7 +75,10 @@ async def get_items():
     url = API_ITEMS
     async with aiohttp.ClientSession() as client:
         async with client.get(url, headers=API_HEADERS) as response:
-            assert response.status == 200
+            if response.status != 200:
+                logger.error(response.text)
+                assert False
+
             return await response.json()
 
 
