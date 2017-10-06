@@ -2,7 +2,6 @@ version: '3.2'
 
 services:
   league_utils_api:
-    build: .
     image: thekevjames/league-utils-api:latest
     deploy:
       mode: replicated
@@ -14,10 +13,6 @@ services:
       update_config:
         parallelism: 1
         monitor: 20s
-    environment:
-      - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}
-      - RIOT_TOKEN=${LEAGUE_TOKEN}
-      - SENTRY_DSN=${SENTRY_DSN_LEAGUE}
     secrets:
       - championgg_token
       - riot_token

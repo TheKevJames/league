@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  league_utils_api:
+    build: .
+    environment:
+      - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}
+      - RIOT_TOKEN=${LEAGUE_TOKEN}
+      - SENTRY_DSN=${SENTRY_DSN_LEAGUE}

@@ -141,6 +141,7 @@ the following might make your life easier:
 ::
 
     curl https://raw.githubusercontent.com/TheKevJames/league/master/docker-compose.yml > docker-compose.yml
+    curl https://raw.githubusercontent.com/TheKevJames/league/master/docker-compose.override.yml > docker-compose.override.yml
     docker-compose pull
     docker-compose up -d
 
