@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import os
+import time
 
 import aiohttp
 
@@ -26,17 +27,56 @@ API_ITEMS = API_STATIC_DATA + '/items'
 logger = logging.getLogger()
 
 
+class RateLimiter:
+    INTERVAL = 10
+    TOKENS = 250  # Riot gives us 500 per 10s, but lets play it safe
+
+    def __init__(self):
+        self.tokens = self.TOKENS
+        self.updated_at = time.monotonic()
+
+    def add_new_tokens(self):
+        now = time.monotonic()
+        if now - self.updated_at >= self.INTERVAL:
+            self.updated_at = now
+            self.tokens = self.TOKENS
+
+    async def wait_for_token(self):
+        while self.tokens < 1:
+            self.add_new_tokens()
+            await asyncio.sleep(1)
+
+        self.tokens -= 1
+
+    async def get(self, client, url, *args, **kwargs):
+        await self.wait_for_token()
+        response = client.get(url, *args, **kwargs)
+        if response.status == 429:
+            logger.info('got 429 accessing %s', url)
+            self.tokens = 0
+
+            try:
+                retry_after = int(response.headers['Retry-After'])
+                logger.info('retrying %s in %ds', url, retry_after)
+                await asyncio.sleep(retry_after)
+                return self.get(client, url, *args, **kwargs)
+            except (KeyError, ValueError):
+                logger.warning('bad Retry-After, got %s', response.headers)
+
+        return response
+
+
+LIMITER = RateLimiter()
+
+
 @async_lru_cache(maxsize=256)
 async def get_champ(cid):
     assert TOKEN
     logger.debug('get_champ(%s)', cid)
     url = API_CHAMP.format(cid)
     async with aiohttp.ClientSession() as client:
-        async with client.get(url, headers=API_HEADERS) as response:
-            if response.status != 200:
-                logger.error(response.text)
-                assert False
-
+        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
+            assert response.status == 200
             return await response.json()
 
 
@@ -46,11 +86,8 @@ async def get_champs():
     logger.debug('get_champs()')
     url = API_CHAMPS
     async with aiohttp.ClientSession() as client:
-        async with client.get(url, headers=API_HEADERS) as response:
-            if response.status != 200:
-                logger.error(response.text)
-                assert False
-
+        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
+            assert response.status == 200
             return await response.json()
 
 
@@ -61,10 +98,7 @@ async def get_item(iid):
     url = API_ITEM.format(iid)
     async with aiohttp.ClientSession() as client:
         async with client.get(url, headers=API_HEADERS) as response:
-            if response.status != 200:
-                logger.error(response.text)
-                assert False
-
+            assert response.status == 200
             return await response.json()
 
 
@@ -74,11 +108,8 @@ async def get_items():
     logger.debug('get_items()')
     url = API_ITEMS
     async with aiohttp.ClientSession() as client:
-        async with client.get(url, headers=API_HEADERS) as response:
-            if response.status != 200:
-                logger.error(response.text)
-                assert False
-
+        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
+            assert response.status == 200
             return await response.json()
 
 
