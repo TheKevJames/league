@@ -5,5 +5,8 @@ services:
     build: .
     environment:
       - CHAMPIONGG_TOKEN=${CHAMPIONGG_TOKEN}
+      - DEBUG=true
       - RIOT_TOKEN=${LEAGUE_TOKEN}
       - SENTRY_DSN=${SENTRY_DSN_LEAGUE}
+    ports:
+      - 8080:80

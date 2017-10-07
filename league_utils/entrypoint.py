@@ -1,4 +1,6 @@
 import asyncio
+import logging
+import os
 import sys
 
 import aiohttp
@@ -8,13 +10,21 @@ import tqdm
 
 from .api.championgg import reset_cache as reset_championgg_cache
 from .api.riot import reset_cache as reset_riot_cache
-from .cli import get_itemsets, parse_champs, save_itemset, Output
-from .server import champs, efficiency, itemset, ping
+from .cli import get_itemsets
+from .cli import Output
+from .cli import parse_champs
+from .cli import save_itemset
+from .server import champs
+from .server import efficiency
+from .server import itemset
+from .server import ping
 
 
 def api():
-    # import logging
-    # logging.basicConfig(level=logging.DEBUG)
+    if os.environ.get('DEBUG', 'false').lower() == 'true':
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
 
     asyncio.ensure_future(reset_championgg_cache())
     asyncio.ensure_future(reset_riot_cache())

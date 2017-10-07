@@ -50,7 +50,7 @@ class RateLimiter:
 
     async def get(self, client, url, *args, **kwargs):
         await self.wait_for_token()
-        response = client.get(url, *args, **kwargs)
+        response = await client.get(url, *args, **kwargs)
         if response.status == 429:
             logger.info('got 429 accessing %s', url)
             self.tokens = 0
@@ -59,7 +59,7 @@ class RateLimiter:
                 retry_after = int(response.headers['Retry-After'])
                 logger.info('retrying %s in %ds', url, retry_after)
                 await asyncio.sleep(retry_after)
-                return self.get(client, url, *args, **kwargs)
+                return await self.get(client, url, *args, **kwargs)
             except (KeyError, ValueError):
                 logger.warning('bad Retry-After, got %s', response.headers)
 
@@ -75,9 +75,9 @@ async def get_champ(cid):
     logger.debug('get_champ(%s)', cid)
     url = API_CHAMP.format(cid)
     async with aiohttp.ClientSession() as client:
-        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
-            assert response.status == 200
-            return await response.json()
+        response = await LIMITER.get(client, url, headers=API_HEADERS)
+        assert response.status == 200
+        return await response.json()
 
 
 @async_lru_cache(maxsize=2)
@@ -86,9 +86,9 @@ async def get_champs():
     logger.debug('get_champs()')
     url = API_CHAMPS
     async with aiohttp.ClientSession() as client:
-        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
-            assert response.status == 200
-            return await response.json()
+        response = await LIMITER.get(client, url, headers=API_HEADERS)
+        assert response.status == 200
+        return await response.json()
 
 
 @async_lru_cache(maxsize=256)
@@ -97,9 +97,9 @@ async def get_item(iid):
     logger.debug('get_item(%s)', iid)
     url = API_ITEM.format(iid)
     async with aiohttp.ClientSession() as client:
-        async with client.get(url, headers=API_HEADERS) as response:
-            assert response.status == 200
-            return await response.json()
+        response = await LIMITER.get(client, url, headers=API_HEADERS)
+        assert response.status == 200
+        return await response.json()
 
 
 @async_lru_cache(maxsize=2)
@@ -108,9 +108,9 @@ async def get_items():
     logger.debug('get_items()')
     url = API_ITEMS
     async with aiohttp.ClientSession() as client:
-        async with LIMITER.get(client, url, headers=API_HEADERS) as response:
-            assert response.status == 200
-            return await response.json()
+        response = await LIMITER.get(client, url, headers=API_HEADERS)
+        assert response.status == 200
+        return await response.json()
 
 
 async def reset_cache():
