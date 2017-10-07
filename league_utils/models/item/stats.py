@@ -81,10 +81,8 @@ def parse_onhit(onhit):
     else:
         value = int(dvalue)
 
-    if 'vs. monster' in onhit:
-        return {'FlatOnHitJungleMod': value}
-    else:
-        return {'FlatOnHitMod': value}
+    name = 'FlatOnHitJungleMod' if 'vs. monster' in onhit else 'FlatOnHitMod'
+    return {name: value}
 
 
 async def parse_single_chunk(description):
