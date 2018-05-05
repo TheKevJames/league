@@ -195,8 +195,6 @@ blindly following its advice won't drop your ELO. You've been warned.
     :target: https://circleci.com/gh/TheKevJames/league
 .. |codacy| image:: https://img.shields.io/codacy/a8f370e55fc94d72b92b2b6615ce165b.svg
     :target: https://www.codacy.com/app/KevinJames/league
-.. |coverage| image:: https://img.shields.io/coveralls/TheKevJames/league/master.svg
-    :target: https://coveralls.io/github/TheKevJames/league?branch=master
 .. |downloads| image:: https://img.shields.io/pypi/dm/league-utils.svg
     :target: https://pypi.python.org/pypi/league-utils
 .. |landscape| image:: https://landscape.io/github/TheKevJames/league/master/landscape.svg?style=flat

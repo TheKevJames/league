@@ -1,6 +1,4 @@
-coveralls
 hypothesis
-pre-commit
 pyinstaller
 pytest
 pytest-cov

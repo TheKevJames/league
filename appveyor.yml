@@ -19,7 +19,6 @@ build_script:
   - "python setup.py build"
 
 test_script:
-  - "pre-commit run --all-files"
   - "python setup.py test"
 
 after_test:

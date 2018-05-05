@@ -1,10 +1,8 @@
 version: 2
 
 jobs:
-  check:
+  lint:
     docker:
-      # https://github.com/docker-library/python/issues/155
-      # - image: python:3.5.2-alpine
       - image: python:3.5.2
     steps:
       - checkout
@@ -180,9 +178,9 @@ jobs:
 
 workflows:
   version: 2
-  check-build-and-deploy:
+  run-jobs:
     jobs:
-      - check:
+      - lint:
           filters:
             tags:
               only: /.*/
@@ -192,31 +190,31 @@ workflows:
             tags:
               only: /.*/
           requires:
-            - check
+            - lint
       - test-py36:
           filters:
             tags:
               only: /.*/
           requires:
-            - check
+            - lint
       - test-py35-dev:
           filters:
             tags:
               only: /.*/
           requires:
-            - check
+            - lint
       - test-py36-dev:
           filters:
             tags:
               only: /.*/
           requires:
-            - check
+            - lint
       - test-py37-dev:
           filters:
             tags:
               only: /.*/
           requires:
-            - check
+            - lint
 
       - push-image:
           context: org-global

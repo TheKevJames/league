@@ -2,6 +2,8 @@ repos:
 -   repo: git://github.com/pre-commit/pre-commit-hooks
     sha: v1.2.3
     hooks:
+    -   id: check-ast
+    -   id: check-builtin-literals
     -   id: check-case-conflict
     -   id: check-executables-have-shebangs
     -   id: check-json
@@ -10,20 +12,18 @@ repos:
     -   id: check-vcs-permalinks
     -   id: check-xml
     -   id: check-yaml
-        args:
-        - -m
+        args: [--allow-multiple-documents]
+    -   id: debug-statements
     -   id: detect-private-key
+    -   id: double-quote-string-fixer
     -   id: end-of-file-fixer
     -   id: file-contents-sorter
-        files: .dockerignore .gitignore
-    -   id: trailing-whitespace
-    -   id: check-ast
-    -   id: check-builtin-literals
-    -   id: double-quote-string-fixer
-    -   id: debug-statements
+        files: .gitignore
     -   id: mixed-line-ending
+        args: [--fix=lf]
     # -   id: name-tests-test  # TODO
     -   id: requirements-txt-fixer
+    -   id: trailing-whitespace
 -   repo: git://github.com/pre-commit/mirrors-pylint
     sha: v1.8.4
     hooks:
@@ -45,12 +45,9 @@ repos:
     sha: v1.0.1
     hooks:
     -   id: reorder-python-imports
-        language_version: python3.6
-        args:
-        - --py3-plus
+        args: [--py3-plus]
 -   repo: git://github.com/asottile/pyupgrade
     sha: v1.2.0
     hooks:
     -   id: pyupgrade
-        args:
-        - --py3-plus
+        args: [--py3-plus]
