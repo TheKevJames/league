@@ -3,8 +3,10 @@ import logging
 
 import aiohttp
 
-from ...api.championgg import get_itemsets_best, get_itemsets_popular
-from ...api.championgg import get_itemstarts_best, get_itemstarts_popular
+from ...api.championgg import get_itemsets_best
+from ...api.championgg import get_itemsets_popular
+from ...api.championgg import get_itemstarts_best
+from ...api.championgg import get_itemstarts_popular
 from ...api.riot import get_champ
 from ...error import APIError
 from ...models import Item
@@ -64,7 +66,7 @@ class Itemset:
             'priority': False,
 
             'isGlobalForChampions': False,
-            'associatedChampions': list(),
+            'associatedChampions': [],
             'associatedMaps': [],
             'isGlobalForMaps': True,
             'champion': self._ckey,
@@ -113,7 +115,7 @@ class Itemset:
             role = convert_role(iset['role'])
             items = [Item(i) for i in iset['items']]
             if role == self.role:
-                winrate = '{0:.3f}'.format(iset['winrate'] * 100)
+                winrate = '{:.3f}'.format(iset['winrate'] * 100)
 
             self._builds['best'][role] = items
 

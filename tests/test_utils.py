@@ -1,8 +1,10 @@
 import collections
 
-from hypothesis import given, strategies
+from hypothesis import given
+from hypothesis import strategies
 
-from league_utils.utils import include, without
+from league_utils.utils import include
+from league_utils.utils import without
 
 
 @given(strategies.lists(strategies.integers()))

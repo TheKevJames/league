@@ -11,7 +11,7 @@ class Champion(object):
         self._name = name  # human-readable
         self._stats = None
 
-        self.roles = list()
+        self.roles = []
         self.builds = collections.defaultdict(list)
         self.starts = collections.defaultdict(list)
 

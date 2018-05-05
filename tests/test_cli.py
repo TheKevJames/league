@@ -1,8 +1,9 @@
 import os
 import platform
 
-from hypothesis import given, strategies
 import pytest
+from hypothesis import given
+from hypothesis import strategies
 
 from league_utils.cli import Output
 

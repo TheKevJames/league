@@ -1,5 +1,3 @@
-from __future__ import division
-
 import math
 
 import league_utils.models as models
@@ -27,10 +25,10 @@ class GoldItemsSupport(object):
         self.item_yellow = models.Item(3301)
         self.item_yellow_upgrade = models.Item(3096)
 
-        self._passive_gold = list()
-        self._blue = list()
-        self._green = list()
-        self._yellow = list()
+        self._passive_gold = []
+        self._blue = []
+        self._green = []
+        self._yellow = []
 
         self.line_blue = None
         self.line_green = None

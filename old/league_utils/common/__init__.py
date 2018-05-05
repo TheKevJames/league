@@ -1,6 +1,6 @@
-from collections import OrderedDict
 import functools
 import operator
+from collections import OrderedDict
 
 
 def dedup(l):

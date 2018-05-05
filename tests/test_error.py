@@ -1,4 +1,5 @@
-from league_utils.error import APIError, CLIError
+from league_utils.error import APIError
+from league_utils.error import CLIError
 
 
 def test_base_class():

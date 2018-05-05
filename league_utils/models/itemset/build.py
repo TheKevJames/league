@@ -4,8 +4,11 @@ import operator
 
 from ...api.riot import get_items
 from ...models import Item
-from ...utils import include, without
-from .constants import BOOTS, CONSUMABLES, CONSUMABLES_EXTRA
+from ...utils import include
+from ...utils import without
+from .constants import BOOTS
+from .constants import CONSUMABLES
+from .constants import CONSUMABLES_EXTRA
 
 
 UNWANTED_TAGS = {'Active', 'Boots', 'Consumable', 'Jungle', 'Lane', 'Trinket'}

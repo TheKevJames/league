@@ -1,4 +1,6 @@
-from hypothesis import example, given, strategies
+from hypothesis import example
+from hypothesis import given
+from hypothesis import strategies
 
 from league_utils.models import Item
 

@@ -210,7 +210,7 @@ class Item(object):
         self._stats = info['stats']
 
         try:
-            self._tags = set(info['tags']) - set(['Bilgewater'])
+            self._tags = set(info['tags']) - {'Bilgewater'}
         except KeyError:
             self._tags = set(self._get_missing_tags())
 

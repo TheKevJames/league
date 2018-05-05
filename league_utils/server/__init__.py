@@ -5,7 +5,8 @@ import aiohttp
 
 from ..api.riot import get_champs
 from ..error import APIError
-from ..models import Item, Itemset
+from ..models import Item
+from ..models import Itemset
 from ..monitor import SENTRY
 
 

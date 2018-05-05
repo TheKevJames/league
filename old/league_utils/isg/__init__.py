@@ -1,7 +1,7 @@
 import league_utils.common as common
-# TODO: aliasing breaks these lines. WTF?
 import league_utils.isg.groups
 import league_utils.isg.wants
+# TODO: aliasing breaks the above two lines. WTF?
 
 
 def item_set(champ, role, items):

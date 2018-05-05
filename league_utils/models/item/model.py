@@ -7,7 +7,8 @@ from ...api.riot import get_item
 from ...error import APIError
 from .stats import build_stats
 from .tags import build_tags
-from .worth import calculate_worth, split_stats
+from .worth import calculate_worth
+from .worth import split_stats
 
 
 logger = logging.getLogger()

@@ -7,7 +7,7 @@ class ChampionMock(object):
     def __init__(self, key):
         self.key = key
 
-        self.roles = list()
+        self.roles = []
         self.builds = collections.defaultdict(list)
         self.starts = collections.defaultdict(list)
 

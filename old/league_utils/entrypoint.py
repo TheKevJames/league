@@ -24,10 +24,10 @@ import docopt
 
 import league_utils.api as api
 import league_utils.data_science as data_science
-import league_utils.models as models
 import league_utils.isg as isg
 import league_utils.isg.encode as encode  # pylint: disable=W0611
 import league_utils.isg.groups as groups  # pylint: disable=W0611
+import league_utils.models as models
 import league_utils.output as output
 import league_utils.sources as sources
 
